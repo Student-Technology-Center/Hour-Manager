@@ -11,6 +11,14 @@ def index(request):
     #Some linters may say this line below is invalid, it IS valid
     hours = HourModel.objects.all()
 
+    if len(hours) == 0:
+        return render(
+            request,
+            'nohours.html',
+            context=None
+        )
+
+
     context = {
         "hours":hours,
     }
