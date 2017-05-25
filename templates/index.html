@@ -3,10 +3,26 @@
 
     </head>
     <body>
-        {% for i in hours %}
-        <p>
-            {{i}}
-        </p>
-        {% endfor %}
+        <h2>HOURS</h2>
+        <ul>
+            <table>
+                <tr>
+                    <th>First</th>
+                    <th>Last</th>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                </tr>
+            {% for i in hours %}
+                <tr>
+                    <td> {{i.first_name}} </td>
+                    <td> {{i.last_name}}   </td>
+                    <td> {{i.date}}       </td>
+                    <td> {{i.start_time}} </td>
+                    <td> {{i.end_time}}   </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </ul>
     </body>
 </html>
