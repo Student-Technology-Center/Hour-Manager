@@ -1,5 +1,8 @@
 <html>
     <head>
+        {% load static %}
+
+        <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
 
     </head>
     <body>
@@ -21,7 +24,7 @@
                     <td> {{i.start_time}} </td>
                     <td> {{i.end_time}}   </td>
                     <td> <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn">Claim </button></a></td>
-                    <td> </td>
+                    <td>  </td>
                 </tr>
             {% endfor %}
             </table>
