@@ -7,8 +7,8 @@ class HourModel(models.Model):
     first_name = models.CharField(max_length=15, help_text="Your first name.")
     last_name = models.CharField(max_length=20, help_text="Your last name.")
     date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    start_time = models.TimeField(help_text="In military time.")
+    end_time = models.TimeField(help_text="In military time.")
     reason = models.CharField(max_length=250, help_text="The reason you need this shift covered.")
 
     def __str__(self):
