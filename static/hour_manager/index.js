@@ -4,12 +4,16 @@ $(document).ready(function(){
     function() {
         $(".menu a").show()
     });
+    $(".reasontd").hide();
 });
 
 $(document).ready(function() {
     $("tr").mouseover(function() {
         $(this).find('.reasontd').show().css({
-            "position":"fixed",
+            "z-index":"1",
+            "position":"relative",
+            "overflow-x":"visible",
+            "overflow-y":"hidden",
             "color":"white",
         });
     }).mouseout(function() {
