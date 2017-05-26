@@ -1,5 +1,6 @@
 '''Hour manager sub directory views stored here'''
 from datetime import datetime
+from random import randint
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -29,7 +30,7 @@ def index(request):
         return render(
             request,
             'nohours.html',
-            context=None
+            context = None
         )
 
 

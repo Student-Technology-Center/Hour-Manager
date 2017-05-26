@@ -1,47 +1,43 @@
+{% load static %}
+
 <html>
     <head>
-        {% load static %}
-
         <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-
-        <script>
-            $(document).ready(function(){
-                $(".menu a").hide(),
-                $(".menu").animate({width: "10%" }, 400,
-                function() {
-                    $(".menu a").show()
-                });
-            });
-        </script>
+        <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
     </head>
     <body id="hourbody">
         <div class="menu">
-            <a href="{% url 'AddHour' %}"> Add hours </a>
+            <a href="{% url 'AddHour' %}"> Give hours </a>
         </div>
         <div id="hoursdiv">       
-            <ul>
-                <table class="hourtable">
-                    <tr>
-                        <th>First</th>
-                        <th>Last</th>
-                        <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Claim</th>
-                    </tr>
-                {% for i in hours %}
-                    <tr>
-                        <td> {{i.first_name}} </td>
-                        <td> {{i.last_name}}   </td>
-                        <td> {{i.date}}       </td>
-                        <td> {{i.start_time}} </td>
-                        <td> {{i.end_time}}   </td>
-                        <td> <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a></td>
-                    </tr>
-                {% endfor %}
-                </table>
-            </ul>
+            <table class="hourtable">
+                <tr>
+                    <th>First</th>
+                    <th>Last</th>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Claim</th>
+                </tr>
+            {% for i in hours %}
+                <tr class="info">
+                    <td> {{i.first_name}} </td>
+                    <td> {{i.last_name}}   </td>
+                    <td> {{i.date}}       </td>
+                    <td> {{i.start_time}} </td>
+                    <td> {{i.end_time}}   </td>
+                    <td> <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a></td>
+                    <td class="reasontd">
+                        <div class="reason">
+                            <p>
+                                {{i.reason}}
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
         </div>
     </body>
 </html>
