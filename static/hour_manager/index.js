@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
     $(".menu a").hide(),
     $(".menu").animate({width: "10%" },
     function() {

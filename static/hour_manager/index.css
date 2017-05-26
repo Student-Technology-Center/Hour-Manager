@@ -51,13 +51,14 @@ table {
 }
 
 td { 
+    text-align: center;
     display:table-cell;
-    min-width:100px;
+    min-width: 100px;
+    max-inline-size: 200px;
 }
 
 th, td, {
     padding: 12px;
-    text-align: left;
     display: block;
 }
 
@@ -71,7 +72,6 @@ td:not(.reasontd) {
 }
 
 tr {
-    text-align: left;
     color: white;
 }
 
