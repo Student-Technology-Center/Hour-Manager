@@ -66,15 +66,9 @@ def AddHour(request):
 
 def claim_page(request, pk):
     '''Uses the hidden primary key of a table to retain which person is being covered'''
-    
+
     shift = HourModel.objects.get(pk=pk)
+    
+    
 
-    context = {
-        "shift":shift
-    }
-
-    return render(
-        request,
-        "claimpage.html",
-        context
-    )
+    return HttpResponseRedirect("/hourmanager")

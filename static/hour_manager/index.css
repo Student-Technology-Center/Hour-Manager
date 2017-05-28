@@ -50,11 +50,10 @@ table {
     width: 50%;
 }
 
-td { 
+td {
     text-align: center;
     display:table-cell;
     min-width: 100px;
-    max-inline-size: 200px;
 }
 
 th, td, {
