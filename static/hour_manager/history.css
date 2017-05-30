@@ -93,12 +93,3 @@ tr:hover {
     transition: 0.5s;
     color: #bdd0ef;
 }
-
-#claimbtn {
-  margin-left: auto;
-  padding: 12px;
-  border: none;
-  background: #808080;
-  color: #fff;
-  cursor: pointer;
-}

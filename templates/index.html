@@ -9,33 +9,40 @@
     <body id="hourbody">
         <div class="menu">
             <a href="{% url 'AddHour' %}"> Give hours </a>
+            <a href="{% url 'history' %}"> History page </a>
         </div>
-        <div id="hoursdiv">       
-            <table class="hourtable">
-                <tr>
-                    <th>First</th>
-                    <th>Last</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Claim</th>
-                </tr>
-            {% for i in hours %}
-                <tr class="info">
-                    <td> {{i.first_name}} </td>
-                    <td> {{i.last_name}}  </td>
-                    <td> {{i.date}}       </td>
-                    <td> {{i.start_time}} </td>
-                    <td> {{i.end_time}}   </td>
-                    <td> <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a></td>
-                    <td class="reasontd">
-                        <span class="reason">
-                            {{i.reason}}
-                        </span>
-                    </td>
-                </tr>
-            {% endfor %}
-            </table>
-        </div>
+        {% if any_hours %}
+
+            <h1 id="nohours"> No hours! </h1>
+
+        {% else %}
+            <div id="hoursdiv">       
+                <table class="hourtable">
+                    <tr>
+                        <th>First</th>
+                        <th>Last</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Claim</th>
+                    </tr>
+                {% for i in hours %}
+                    <tr class="info">
+                        <td> {{i.first_name}} </td>
+                        <td> {{i.last_name}}  </td>
+                        <td> {{i.date}}       </td>
+                        <td> {{i.start_time}} </td>
+                        <td> {{i.end_time}}   </td>
+                        <td> <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a></td>
+                        <td class="reasontd">
+                            <span class="reason">
+                                {{i.reason}}
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        {% endif %}
     </body>
 </html>

@@ -11,6 +11,7 @@ from wwustc.settings import USE_CAS
 
 from .forms import HourAddForm
 
+@login_required
 def index(request):
     '''Return the index page.'''
     
@@ -27,16 +28,9 @@ def index(request):
     #Some linters may say this line below is invalid, it IS valid
     hours = HourModel.objects.all()
 
-    if len(hours) == 0:
-        return render(
-            request,
-            'nohours.html',
-            context = None
-        )
-
-
     context = {
         "hours":hours,
+        "any_hours":len(hours) == 0
     }
 
     return render(
@@ -45,6 +39,7 @@ def index(request):
         context
     )
 
+@login_required
 def AddHour(request):
     '''Page to add hours to the hour manager'''
     form = HourAddForm(request.POST or None)
@@ -65,6 +60,7 @@ def AddHour(request):
         context
     )
 
+@login_required
 def claim_page(request, pk):
     '''Uses the hidden primary key of a table to retain which person is being covered'''
 
@@ -73,16 +69,27 @@ def claim_page(request, pk):
     if not USE_CAS:
         print("USE_CAS IS FALSE. EMAIL FUNCTION WILL NOT WORK.")
 
-    if not request.user == "AnonymousUser":
-        hour_history.objects.create(cover_username = request.user,
-                                    coveree_first = shift.first_name,
-                                    coveree_last = shift.last_name,
-                                    date = shift.date,
-                                    start_time = shift.start_time,
-                                    end_time = shift.end_time)
+    hour_history.objects.create(cover_username = request.user,
+                                coveree_first = shift.first_name,
+                                coveree_last = shift.last_name,
+                                date = shift.date,
+                                start_time = shift.start_time,
+                                end_time = shift.end_time)
 
-        shift.delete()
-    else:
-        print("USER NOT LOGGED IN")
+    shift.delete()
     
     return HttpResponseRedirect("/hourmanager")
+
+def history(request):
+    
+    shifthistory = hour_history.objects.all()
+
+    context = {
+        "history":shifthistory
+    }
+
+    return render(
+        request,
+        "history.html",
+        context
+    )
