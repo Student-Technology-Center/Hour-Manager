@@ -16,10 +16,20 @@ class HourModel(models.Model):
         return "{} {} | {}:{}".format(self.first_name, self.last_name, self.date, self.start_time)
 
 class hour_history(models.Model):
-    cover_first = models.CharField(max_length=15)
-    cover_last = models.CharField(max_length=20)
+    cover_username = models.CharField(max_length=25)
     coveree_first = models.CharField(max_length=15)
     coveree_last = models.CharField(max_length=20)
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+
+class cover_history(models.Model):
+    cover_username = models.CharField(max_length=25)
+    poster_first = models.CharField(max_length=25)
+    poster_first = models.CharField(max_length=25)
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+class suggestions(models.Model):
+    suggestion = models.CharField(max_length=250)
