@@ -1,37 +1,41 @@
 {% load static %}
 
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="{% static "hour_manager/history.css" %}">
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
-    </head>
-    <body id="hourbody">
-        <div class="menu">
-            <a href="{% url 'AddHour' %}"> Give hours </a>
-            <a href="{% url 'index' %}"> Hour page </a>
-        </div>
-        <div id="hoursdiv">       
-            <table class="hourtable">
-                <tr>
-                    <th>First</th>
-                    <th>Last</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Person Covering</th>
-                </tr>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/history.css" %}">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
+</head>
+
+<body id="hourbody">
+    <div class="menu">
+        <a href="{% url 'AddHour' %}"> Give hours </a>
+        <a href="{% url 'index' %}"> Hour page </a>
+        <a href="{% url 'comments' %}"> Generate comments </a>
+    </div>
+    <div id="hoursdiv">
+        <table class="hourtable">
+            <tr>
+                <th>First</th>
+                <th>Last</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Person Covering</th>
+            </tr>
             {% for i in history %}
-                <tr class="info">
-                    <td> {{i.coveree_first}} </td>
-                    <td> {{i.coveree_last}}  </td>
-                    <td> {{i.date}}       </td>
-                    <td> {{i.start_time}} </td>
-                    <td> {{i.end_time}}   </td>
-                    <td> {{i.cover_username}} </td>
-                </tr>
+            <tr class="info">
+                <td> {{i.coveree_first}} </td>
+                <td> {{i.coveree_last}} </td>
+                <td> {{i.date}} </td>
+                <td> {{i.start_time}} </td>
+                <td> {{i.end_time}} </td>
+                <td> {{i.cover_username}} </td>
+            </tr>
             {% endfor %}
-            </table>
-        </div>
-    </body>
+        </table>
+    </div>
+</body>
+
 </html>

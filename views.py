@@ -80,6 +80,26 @@ def claim_page(request, pk):
     
     return HttpResponseRedirect("/hourmanager")
 
+@login_required
+def comments(request):
+    
+    user = request.user
+    shifts = []
+
+    for i in hour_history.objects.all():
+        if i.cover_username == user:
+            shifts.append
+
+    context = {
+        "shifts":shifts
+    }
+
+    return render(
+        request,
+        "comments.html",
+        context
+    )
+
 def history(request):
     
     shifthistory = hour_history.objects.all()
