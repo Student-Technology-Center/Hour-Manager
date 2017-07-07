@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from hour_manager.models import HourModel, hour_history
-from wwustc.settings import USE_CAS
 
 from .forms import HourAddForm
 
@@ -65,9 +64,6 @@ def claim_page(request, pk):
     '''Uses the hidden primary key of a table to retain which person is being covered'''
 
     shift = HourModel.objects.get(pk=pk)
-
-    if not USE_CAS:
-        print("USE_CAS IS FALSE. EMAIL FUNCTION WILL NOT WORK.")
 
     hour_history.objects.create(cover_username = request.user,
                                 coveree_first = shift.first_name,
