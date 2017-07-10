@@ -3,9 +3,11 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
     <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
+    <script src="{% static 'hour_manager/menu.js' %}"></script>
 </head>
 
 <body id="hourbody">
@@ -40,9 +42,7 @@
                     <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a>
                 </td>
                 <td class="reasontd">
-                    <span class="reason">
-                                {{i.reason}}
-                            </span>
+                    {{i.reason}}
                 </td>
             </tr>
             {% endfor %}

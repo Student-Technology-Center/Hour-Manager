@@ -13,11 +13,21 @@ html {
    color: white;
 }
 
-.reason {
-    text-align: center;
+.reasontd {
+    opacity: 0;
+
+    position: fixed;
+
+    color: white;
+
+    background-color: #3F637F;
+
+    padding: 12px;
 }
 
 .menu {
+    border-right: 1px solid white;
+
     max-width: 200px;
     height: 100%;
     width: 0%;
@@ -51,8 +61,16 @@ body {
     background-color: #1F3140;
 }
 
-table {
+.hourtable {
     border-collapse: collapse;
+
+    position: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    width: 50%;
 }
 
 #hoursdiv {
@@ -61,7 +79,7 @@ table {
     width: 50%;
 }
 
-td {
+td:not(.reasontd) {
     text-align: center;
     display:table-cell;
     min-width: 100px;
@@ -75,6 +93,8 @@ th, td, {
 th {
     background-color: #71B2E5;
     color: white;
+
+    padding: 15px;
 }
 
 td:not(.reasontd) {
