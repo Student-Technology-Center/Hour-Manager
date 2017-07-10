@@ -66,7 +66,7 @@ def claim_page(request, pk):
 
     shift = HourModel.objects.get(pk=pk)
 
-    hour_history.objects.create(cover_username = "{} {}".format(request.user.first_name, request.user.last_name),
+    hour_history.objects.create(cover_username = request.user.username,
                                 coveree_first = shift.first_name,
                                 coveree_last = shift.last_name,
                                 date = shift.date,
@@ -79,13 +79,11 @@ def claim_page(request, pk):
 
 @login_required
 def comments(request):
-    
-    user = request.user
     shifts = []
 
-    for i in hour_history.objects.all():
-        if i.cover_username == user:
-            shifts.append
+    for shift in hour_history.objects.all():
+        if shift.cover_username == request.user.username:
+            shifts.append(shift)
 
     context = {
         "shifts":shifts

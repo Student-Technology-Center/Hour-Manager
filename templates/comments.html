@@ -3,8 +3,8 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
     <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
     <script src="{% static 'hour_manager/menu.js' %}"></script>
 </head>
@@ -12,21 +12,18 @@
 <body id="hourbody">
     <div class="menu">
         <a href="{% url 'AddHour' %}"> Give hours </a>
+        <a href="{% url 'index' %}"> Hour page </a>
         <a href="{% url 'history' %}"> History page </a>
     </div>
-    {% if any_hours %}
-
-    <h1 id="nohours"> No hours! </h1>
-
-    {% else %}
     <div id="hoursdiv">
+        <table>
             {% for i in shifts %}
-                <p>
-                    {{ i.date }} Covered hours {{ i.start_time }} - {{ i.end_time }} for {{ i.coveree_first }} {{ i.coveree_last }}
-                </p>
+                <tr>
+                    <td>{{ i.date }} Covered hours {{ i.start_time }} - {{ i.end_time }} for {{ i.coveree_first }} {{ i.coveree_last }}</td>
+                </tr>
             {% endfor %}
+        </table>
     </div>
-    {% endif %}
 </body>
 
 </html>
