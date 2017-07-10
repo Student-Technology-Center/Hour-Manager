@@ -66,7 +66,7 @@ def claim_page(request, pk):
 
     shift = HourModel.objects.get(pk=pk)
 
-    hour_history.objects.create(cover_username = request.user,
+    hour_history.objects.create(cover_username = "{} {}".format(request.user.first_name, request.user.last_name),
                                 coveree_first = shift.first_name,
                                 coveree_last = shift.last_name,
                                 date = shift.date,
