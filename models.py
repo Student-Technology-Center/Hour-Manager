@@ -4,6 +4,7 @@ from django.db import models
 # Create your models here.
 class HourModel(models.Model):
     '''A model for holding hours'''
+    username = models.CharField(max_length=64)
     first_name = models.CharField(max_length=30, help_text="Your first name.")
     last_name = models.CharField(max_length=30, help_text="Your last name.")
     date = models.DateField()

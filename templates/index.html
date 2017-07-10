@@ -29,7 +29,7 @@
                 <th>Date</th>
                 <th>Start Time</th>
                 <th>End Time</th>
-                <th>Claim</th>
+                <th>Claim/Delete</th>
             </tr>
             {% for i in hours %}
             <tr class="info">
@@ -38,9 +38,15 @@
                 <td> {{i.date}} </td>
                 <td> {{i.start_time}} </td>
                 <td> {{i.end_time}} </td>
+                {% if i.username != user.username %}
                 <td>
                     <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a>
                 </td>
+                {% else %}
+                <td>
+                    <a href="{% url 'remove' pk=i.pk %}"> <button id="claimbtn"> Delete </button></a>
+                </td>
+                {% endif %}
                 <td class="reasontd">
                     {{i.reason}}
                 </td>

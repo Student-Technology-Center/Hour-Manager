@@ -19,13 +19,13 @@ def index(request):
     current_time = date_obj.time()
     current_date = date_obj.date()
 
-    #Remove all previous dates, everytime someone loads the page
-    for i in HourModel.objects.all():
-        if (i.date < current_date and i.start_time < current_time):
-            i.delete()
-        
     #Some linters may say this line below is invalid, it IS valid
     hours = HourModel.objects.all()
+
+    #Remove all previous dates, everytime someone loads the page
+    for i in hours:
+        if (i.date < current_date and i.start_time < current_time):
+            i.delete()
 
     context = {
         "hours":hours,
@@ -45,6 +45,7 @@ def AddHour(request):
 
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.username = request.user.username
         instance.first_name = request.user.first_name
         instance.last_name = request.user.last_name
         instance.save()
@@ -72,8 +73,20 @@ def claim_page(request, pk):
                                 date = shift.date,
                                 start_time = shift.start_time,
                                 end_time = shift.end_time)
-
     shift.delete()
+    
+    return HttpResponseRedirect("/hourmanager")
+
+@login_required
+def remove_entry(request, pk):
+    '''Uses the hidden primary key of a table to retain which person is being covered''' 
+
+    shift = HourModel.objects.get(pk=pk)
+
+    if request.user.username != shift.username:
+        return HttpResponseRedirect("/hourmanager")
+    else:
+        shift.delete()
     
     return HttpResponseRedirect("/hourmanager")
 
