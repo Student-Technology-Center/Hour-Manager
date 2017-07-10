@@ -45,8 +45,9 @@ def AddHour(request):
 
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.first_name = request.user.first_name
+        instance.last_name = request.user.last_name
         instance.save()
-        print(instance.first_name)
         return HttpResponseRedirect("/hourmanager")
 
     context = {

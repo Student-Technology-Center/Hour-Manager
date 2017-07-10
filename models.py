@@ -4,8 +4,8 @@ from django.db import models
 # Create your models here.
 class HourModel(models.Model):
     '''A model for holding hours'''
-    first_name = models.CharField(max_length=15, help_text="Your first name.")
-    last_name = models.CharField(max_length=20, help_text="Your last name.")
+    first_name = models.CharField(max_length=30, help_text="Your first name.")
+    last_name = models.CharField(max_length=30, help_text="Your last name.")
     date = models.DateField()
     start_time = models.TimeField(help_text="In military time.")
     end_time = models.TimeField(help_text="In military time.")
