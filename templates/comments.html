@@ -3,11 +3,29 @@
 <html>
 
 <head>
+    
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/comments.css' %}"> 
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/comments.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
     <script src="{% static 'hour_manager/menu.js' %}"></script>
+
+    <!-- Set start/end to jQuery datepickers -->
+    <script>
+        $(function() {
+            $("#datepicker_one").datepicker({
+                showButtonPanel: true,
+                dateFormat: "yy-mm-dd"
+            });
+            $("#datepicker_two").datepicker({
+                showButtonPanel: true,
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
 </head>
 
 <body id="hourbody">
@@ -15,6 +33,7 @@
         <a href="{% url 'AddHour' %}"> Give hours </a>
         <a href="{% url 'index' %}"> Hour page </a>
         <a href="{% url 'history' %}"> History page </a>
+        <a href="{% url 'main_page:index' %}"> Main </a>
     </div>
     <div id="hoursdiv">
         {% if date_err %}
@@ -30,8 +49,9 @@
             </ul>
         {% else %}
             <form action="." method="get">
-                From: <input type="date" name="start">
-                To: <input type="date" name="end">
+                <!-- I already tried to name the inputs the same name, jquery won't do anything about it -->
+                From: <input readonly type="text" name="start" id="datepicker_one">
+                To: <input readonly type="text" name="end" id="datepicker_two">
                 <input type="submit">
             </form>
         {% endif %}

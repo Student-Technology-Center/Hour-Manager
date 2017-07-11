@@ -1,5 +1,8 @@
 body {
-    color: white
+    color: white;
+    background-color: #1F3140;
+
+    font-family: sans-serif;
 }
 
 ul {
@@ -10,3 +13,42 @@ ul {
     padding: 0;
     margin: 0;
 }
+
+.menu {
+    border-right: 1px solid white;
+
+    max-width: 200px;
+    height: 100%;
+    width: 0%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #3F637F;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+
+    opacity: 0;
+
+    transition: 0.3s;
+    border-bottom: 1px solid white;
+}
+
+.menu a:hover {
+    color: #bdd0ef;
+}
+
+#hoursdiv {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
