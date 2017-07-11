@@ -15,7 +15,10 @@ from datetime import date
 @login_required
 def index(request):
     '''Return the index page.'''
-    
+
+    #easter_egg = randint(0, 100)
+    easter_egg = 77
+
     date_obj = datetime.now()
 
     current_time = date_obj.time()
@@ -31,7 +34,8 @@ def index(request):
 
     context = {
         "hours":hours,
-        "any_hours":len(hours) == 0
+        "any_hours":len(hours) == 0,
+        "egg": easter_egg == 77
     }
 
     return render(

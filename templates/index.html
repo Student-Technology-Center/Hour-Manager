@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
     <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
     <script src="{% static 'hour_manager/menu.js' %}"></script>
+
+    {% if egg %}
+        <script src="{% static 'hour_manager/egg.js' %}"></script>
+    {% endif %}
 </head>
 
 <body id="hourbody">
@@ -19,9 +23,14 @@
     </div>
     {% if any_hours %}
 
-    <h1 id="nohours"> No hours! </h1>
+        <h1 id="nohours"> No hours! </h1>
 
     {% else %}
+    {% if egg %}
+
+        <h1 id="nohours"> A E S T H E T I C </h1>
+
+    {% endif %}
     <div id="hoursdiv">
         <table class="hourtable">
             <tr>
