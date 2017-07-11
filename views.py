@@ -16,8 +16,7 @@ from datetime import date
 def index(request):
     '''Return the index page.'''
 
-    #easter_egg = randint(0, 100)
-    easter_egg = 77
+    easter_egg = randint(0, 100)
 
     date_obj = datetime.now()
 
