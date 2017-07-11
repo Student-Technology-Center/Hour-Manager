@@ -6,6 +6,18 @@ html {
     font-family: sans-serif;
 }
 
+#main {
+    position: absolute;
+
+    border-top: 1px solid white;
+    border-bottom: none;
+
+    float: bottom;
+    bottom: 0;
+
+    width: 100%;
+}
+
 #nohours {
    margin: 0;
    position: absolute;              

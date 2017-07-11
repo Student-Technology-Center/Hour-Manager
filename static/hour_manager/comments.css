@@ -52,3 +52,14 @@ ul {
     width: 50%;
 }
 
+#main {
+    position: absolute;
+
+    border-top: 1px solid white;
+    border-bottom: none;
+
+    float: bottom;
+    bottom: 0;
+
+    width: 100%;
+}

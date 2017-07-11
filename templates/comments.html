@@ -33,7 +33,7 @@
         <a href="{% url 'AddHour' %}"> Give hours </a>
         <a href="{% url 'index' %}"> Hour page </a>
         <a href="{% url 'history' %}"> History page </a>
-        <a href="{% url 'main_page:index' %}"> Main </a>
+        <a href="{% url 'main_page:index' %}" id="main"> Home </a>
     </div>
     <div id="hoursdiv">
         {% if date_err %}
