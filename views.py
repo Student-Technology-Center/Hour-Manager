@@ -10,6 +10,8 @@ from hour_manager.models import HourModel, hour_history
 
 from .forms import HourAddForm
 
+from datetime import date
+
 @login_required
 def index(request):
     '''Return the index page.'''
@@ -92,16 +94,36 @@ def remove_entry(request, pk):
 
 @login_required
 def comments(request):
-    shifts = []
+    context = { }
 
-    for shift in hour_history.objects.all():
-        if shift.cover_username == request.user.username:
-            shifts.append(shift)
+    #Ensure the get goes through and is what we need.
+    if request.method == 'GET':
+        start = request.GET.get('start')
+        end = request.GET.get('end')
+        if (start and end):
 
-    context = {
-        "shifts":shifts
-    }
+            #Format dates for easy comparison
+            start = start.split('-')
+            end = end.split('-')
 
+            try:
+                start_date = date(int(start[0]), int(start[1]), int(start[2]))
+                end_date = date(int(end[0]), int(end[1]), int(end[2]))
+                shifts = hour_history.objects.all()
+            except:
+                return render(
+                    request,
+                    "comments.html",
+                    { "date_err": True }
+                )
+
+            context["comments"] = []
+            context["show_table"] = True
+
+            for i in shifts:
+                if (i.date >= start_date and i.date <= end_date):
+                    context["comments"].append(i)
+                    
     return render(
         request,
         "comments.html",
@@ -109,11 +131,9 @@ def comments(request):
     )
 
 def history(request):
-    
-    shifthistory = hour_history.objects.all()
 
     context = {
-        "history":shifthistory
+        "history": hour_history.objects.all()
     }
 
     return render(

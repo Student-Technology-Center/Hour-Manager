@@ -5,6 +5,7 @@
 <head>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/comments.css' %}"> 
     <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
     <script src="{% static 'hour_manager/menu.js' %}"></script>
 </head>
@@ -16,13 +17,24 @@
         <a href="{% url 'history' %}"> History page </a>
     </div>
     <div id="hoursdiv">
-        <table>
-            {% for i in shifts %}
-                <tr>
-                    <td>{{ i.date }} Covered hours {{ i.start_time }} - {{ i.end_time }} for {{ i.coveree_first }} {{ i.coveree_last }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% if date_err %}
+            <h2>
+                Please enter a valid date.
+            </h2>
+        {% endif %}
+        {% if show_table %}
+            <ul>
+                {% for i in comments %}
+                        <li>{{ i.date }} Covered hours {{ i.start_time }} - {{ i.end_time }} for {{ i.coveree_first }} {{ i.coveree_last }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <form action="." method="get">
+                From: <input type="date" name="start">
+                To: <input type="date" name="end">
+                <input type="submit">
+            </form>
+        {% endif %}
     </div>
 </body>
 
