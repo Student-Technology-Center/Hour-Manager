@@ -1,9 +1,23 @@
 {% load static %}
 
 <html>
-
 <head>
-        <script src="{% static 'hour_manager/menu.js' %}"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script type="text/javascript" src="{% static 'hour_manager/js/jquery.timepicker.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'hour_manager/css/jquery.timepicker.css' %}">
+    <script>
+        $(function() {
+            $("#id_date").datepicker({
+                showButtonPanel: true,
+                dateFormat: "yy-mm-dd"
+            });
+            $("#id_start_time").timepicker({ 'timeFormat': 'H:i' });
+            $("#id_end_time").timepicker({ 'timeFormat': 'H:i' });
+        });
+    </script>
 </head>
 
 <body>

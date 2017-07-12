@@ -5,17 +5,19 @@
 <head>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     
-    <link rel="stylesheet" type="text/css" href="{% static "hour_manager/index.css" %}">
-    <script type="text/javascript" src="{% static "hour_manager/index.js" %}"></script>
-    <script src="{% static 'hour_manager/menu.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/index.css' %}">
+    <script type="text/javascript" src="{% static 'hour_manager/>js/index.js' %}"></script>
+    <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 
     {% if egg %}
-        <script src="{% static 'hour_manager/egg.js' %}"></script>
+        <script src="{% static 'hour_manager/js/egg.js' %}"></script>
     {% endif %}
+    
 </head>
 
 <body id="hourbody">
     <div class="menu">
+        <a href="{% url 'index' %}"> Hour page </a>
         <a href="{% url 'AddHour' %}"> Give hours </a>
         <a href="{% url 'history' %}"> History page </a>
         <a href="{% url 'comments' %}"> Generate comments </a>
@@ -26,11 +28,11 @@
         <h1 id="nohours"> No hours! </h1>
 
     {% else %}
-    {% if egg %}
+        {% if egg %}
 
-        <h1 id="nohours"> A E S T H E T I C </h1>
+            <h1 id="nohours"> A E S T H E T I C </h1>
 
-    {% endif %}
+        {% endif %}
     <div id="hoursdiv">
         <table class="hourtable">
             <tr>
