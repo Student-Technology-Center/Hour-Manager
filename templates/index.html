@@ -6,7 +6,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     
     <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/index.css' %}">
-    <script type="text/javascript" src="{% static 'hour_manager/>js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'hour_manager/js/index.js' %}"></script>
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 
     {% if egg %}
@@ -24,8 +24,8 @@
         <a href="{% url 'main_page:index' %}" id="main"> Home </a>
     </div>
     {% if any_hours %}
-
-        <h1 id="nohours"> No hours! </h1>
+    <div id="hourdiv"> <h1 id="nohours"> No hours! </h1> </div>
+        
 
     {% else %}
         {% if egg %}
