@@ -20,7 +20,7 @@ form input[type='text'] {
     border-radius: 6px;
 
     padding: 6px;
-    width: 300px;
+    width: 100%;
     height: 30px;
 
     font-size: 20px;
@@ -49,14 +49,13 @@ form input[type='submit']:hover {
     color: black;
 }
 
-#hoursdiv form {
-    display: block;
-
-    margin: 0 auto;
+#ui-datepicker-div {
+    display: none;
+    width: 25%;
 }
 
-#hoursdiv form input {
-    margin: 12px;
+.ui-datepicker-calendar {
+    height: 100%;
 }
 
 .menu {
@@ -91,12 +90,6 @@ form input[type='submit']:hover {
     color: #bdd0ef;
 }
 
-#hoursdiv {
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-
 #main {
     position: absolute;
 
@@ -109,12 +102,12 @@ form input[type='submit']:hover {
     width: 100%;
 }
 
-#hoursdiv ul {
+.errorlist {
     list-style-type: none;
     padding: 0;
 }
 
-
-#hoursdiv ul li {
-    color: white;
+.errorlist li {
+    display: block;
+    color: #E64B3C;
 }

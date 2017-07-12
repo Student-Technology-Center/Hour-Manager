@@ -5,12 +5,12 @@ from django.db import models
 class HourModel(models.Model):
     '''A model for holding hours'''
     username = models.CharField(max_length=64)
-    first_name = models.CharField(max_length=30, help_text="Your first name.")
-    last_name = models.CharField(max_length=30, help_text="Your last name.")
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     date = models.DateField()
-    start_time = models.TimeField(help_text="In military time.")
-    end_time = models.TimeField(help_text="In military time.")
-    reason = models.CharField(max_length=120, help_text="The reason you need this shift covered.")
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    reason = models.CharField(max_length=120)
 
     def __str__(self):
         '''Returns a string representation of the entry'''

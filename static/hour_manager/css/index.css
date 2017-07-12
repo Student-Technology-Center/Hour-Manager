@@ -126,6 +126,13 @@ tr:hover {
   background: #808080;
   color: #fff;
   cursor: pointer;
+
+  transition: .3s;
+}
+
+#claimbtn:hover {
+    background: #bdd0ef;
+    color: black;
 }
 
 #main {

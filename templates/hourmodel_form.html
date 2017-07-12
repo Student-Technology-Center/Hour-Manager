@@ -8,6 +8,10 @@
 
     <script type="text/javascript" src="{% static 'hour_manager/js/jquery.timepicker.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'hour_manager/css/jquery.timepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'hour_manager/css/add_hour.css' %}">
+    <script src="{% static 'hour_manager/js/menu.js' %}"></script>
+
     <script>
         $(function() {
             $("#id_date").datepicker({
@@ -21,6 +25,13 @@
 </head>
 
 <body>
+    <div class="menu">
+        <a href="{% url 'index' %}"> Hour page </a>
+        <a href="{% url 'AddHour' %}"> Give hours </a>
+        <a href="{% url 'history' %}"> History page </a>
+        <a href="{% url 'comments' %}"> Generate comments </a>
+        <a href="{% url 'main_page:index' %}" id="main"> Home </a>
+    </div>
     <form method="POST" action ".">
         {% csrf_token %} 
         {{ form.as_p }}
