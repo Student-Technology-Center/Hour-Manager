@@ -31,6 +31,9 @@ def index(request):
         if (i.date < current_date and i.start_time < current_time):
             i.delete()
 
+    if request.method == "POST":
+        return "Hey."
+
     context = {
         "hours":hours,
         "any_hours":len(hours) == 0,
@@ -83,19 +86,6 @@ def claim_page(request, pk):
     return HttpResponseRedirect("/hourmanager")
 
 @login_required
-def remove_entry(request, pk):
-    '''Uses the hidden primary key of a table to retain which person is being covered''' 
-
-    shift = HourModel.objects.get(pk=pk)
-
-    if request.user.username != shift.username:
-        return HttpResponseRedirect("/hourmanager")
-    else:
-        shift.delete()
-    
-    return HttpResponseRedirect("/hourmanager")
-
-@login_required
 def comments(request):
     context = { }
 
@@ -132,6 +122,11 @@ def comments(request):
         "comments.html",
         context
     )
+
+@login_required
+def edit(request, pk):
+    raise NotImplementedError("This page is in progress.")
+    return None
 
 def history(request):
 

@@ -56,7 +56,7 @@
                 </td>
                 {% else %}
                 <td>
-                    <a href="{% url 'remove' pk=i.pk %}"> <button id="claimbtn"> Delete </button></a>
+                    <a href="{% url 'edit' pk=i.pk %}"> <button id="editbtn"> Edit </button></a>  
                 </td>
                 {% endif %}
                 <td class="reasontd">

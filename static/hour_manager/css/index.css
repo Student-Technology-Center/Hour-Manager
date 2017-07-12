@@ -16,11 +16,14 @@ html {
 .reasontd {
     opacity: 0;
 
-    position: fixed;
+    position: absolute;
 
     color: white;
 
     background-color: #3F637F;
+
+    border-top: 1px solid white;
+    
 
     padding: 12px;
 }
@@ -105,6 +108,7 @@ td:not(.reasontd) {
 
 tr {
     color: white;
+    height: 50px;
 }
 
 tr:nth-child(even){
@@ -120,6 +124,7 @@ tr:hover {
     color: #bdd0ef;
 }
 
+#editbtn,
 #claimbtn {
   margin-left: auto;
   padding: 12px;
@@ -131,6 +136,7 @@ tr:hover {
   transition: .3s;
 }
 
+#editbtn:hover,
 #claimbtn:hover {
     background: #bdd0ef;
     color: black;
