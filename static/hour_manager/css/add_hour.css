@@ -111,3 +111,7 @@ form input[type='submit']:hover {
     display: block;
     color: #E64B3C;
 }
+
+.picker__input.picker__input--active {
+  background-color: #bdd0ef;
+}
