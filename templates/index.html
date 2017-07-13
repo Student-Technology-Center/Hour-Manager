@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 
 <html>
 
@@ -24,8 +25,8 @@
         <a href="{% url 'main_page:index' %}" id="main"> Home </a>
     </div>
     {% if any_hours %}
-    <div id="hourdiv"> <h1 id="nohours"> No hours! </h1> </div>
-        
+    
+        <div id="hourdiv"> <h1 id="nohours"> No hours! </h1> </div>
 
     {% else %}
         {% if egg %}
@@ -48,8 +49,8 @@
                 <td> {{i.first_name}} </td>
                 <td> {{i.last_name}} </td>
                 <td> {{i.date}} </td>
-                <td> {{i.start_time}} </td>
-                <td> {{i.end_time}} </td>
+                <td> {{i.start_time|time_format}} </td>
+                <td> {{i.end_time|time_format}} </td>
                 {% if i.username != user.username %}
                 <td>
                     <a href="{% url 'claim_page' pk=i.pk %}"> <button id="claimbtn"> Claim </button></a>
