@@ -16,36 +16,24 @@
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 
     <script>
-        var date_input
-        var start_time_input;
-        var end_time_input;
+        var dateInput
+        var startTimeInput
+        var endTimeInput;
+        
+        weekdayStartTime = 8
+        weekdayEndTime = 21
+        
+        saturdayStartTime = 11
+        saturdayEndTime = 18
+        
+        sundayStartTime = 14
+        // I have this comment here to show I didnt forget about sunday end time, it just happens to be the same as a normal week day
+        // sundayEndTime = 21
         
         $(function() {
-            var date_input = $('#id_date').pickadate({
-              onClose: function(context) {
-                date = date_input.pickadate('picker').get('select')
-                
-                if (date == null) {
-                  return
-                }
-                
-                dayOfTheWeek = date.obj.getDay()
-                
-                startTimePicker = start_time_input.pickatime('picker')
-                endTimePicker = end_time_input.pickatime('picker')
-                                
-                if (dayOfTheWeek == 0) {
-                  setNewTime([14,0], [20,0], startTimePicker, endTimePicker)
-                }
-                else if (dayOfTheWeek == 5) {
-                  setNewTime([8,0], [16,0], startTimePicker, endTimePicker)
-                }
-                else if(dayOfTheWeek == 6) {
-                  setNewTime([11,0], [17,0], startTimePicker, endTimePicker)
-                }
-                else {
-                  setNewTime([8,0], [20,0], startTimePicker, endTimePicker)
-                }
+            dateInput = $('#id_date').pickadate({
+              onClose: function() {   
+                getPicker(startTimeInput).open()
               },
               
               format: 'dddd, mmmm dd, yyyy',
@@ -54,45 +42,93 @@
               hiddenSuffix: ''
             })
             
-            start_time_input = $('#id_start_time').pickatime({
+            dateInput.type = "date"
+            
+            startTimeInput = $('#id_start_time').pickatime({
+              onOpen: function() {
+                limitHoursToDay(startTimeInput, false)
+              },
+              
+              onClose: function() {
+                startData = getSelectData(startTimeInput)
+                endData = getSelectData(endTimeInput)
+                
+                if (startData != null && endData != null) {
+                  getPicker(endTimeInput).clear()
+                }
+                
+                getPicker(endTimeInput).open()
+              },
+              
               interval: 60,
-              min: [8,0],
-              max: [20,0],
               formatSubmit: 'HH:i',
               hiddenSuffix: ''
             })
             
-            end_time_input = $('#id_end_time').pickatime({
+            endTimeInput = $('#id_end_time').pickatime({
+              
+              onOpen: function() {
+                restrainTimeInput(endTimeInput, startTimeInput, true)
+              },
+              
+              min: [weekdayStartTime, 0],
+              max: [weekdayEndTime, 0],
               interval: 60,
-              min: [9,0],
-              max: [21,0],
               formatSubmit: 'HH:i',
               hiddenSuffix: ''
             })
+            
+            startTimeInput.type = endTimeInput.type = "time"
         });
         
-        function setNewTime(min, max, pickerStart, pickerEnd) {                  
-          pickerStartHour = (pickerStart.get('select') == null) ? null : pickerStart.get('select').hour
-          pickerEndHour = (pickerEnd.get('select') == null) ? null : pickerEnd.get('select').hour
+        function setNewTime(min, max, increment, timeInput) {
+          timePicker = getPicker(timeInput)
           
-          pickerStart.set('min', min)
-          pickerStart.set('max', max)
+          min = increment ? min + 1 : min
+          max = increment ? max : max - 1
           
-          if (pickerStartHour != null && (pickerStartHour < min[0] || pickerStartHour > max[0])) {
-            pickerStart.clear()
+          timePicker.set('min', [min, 0])
+          timePicker.set('max', [max, 0])
+        }
+        
+        function restrainTimeInput (inputToModify, baseInput, after) {
+          if (getSelectData(baseInput) ==  null) {
+            limitHoursToDay(inputToModify, after)
+            return
           }
           
-          min[0] = min[0] + 1
-          max[0] = max[0] + 1
+          minHour = after ? getSelectData(baseInput).hour : getPicker(inputToModify).get('min').hour
+          maxHour = after ? getPicker(inputToModify).get('max').hour : getSelectData(baseInput).hour
           
-          pickerEnd.set('min', min)
-          pickerEnd.set('max', max)
+          setNewTime(minHour, maxHour, after, inputToModify)
+        }
+        
+        function limitHoursToDay(input, increment) {
+          data = getSelectData(dateInput)
+          if (data == null) {
+            setNewTime(weekdayStartTime, weekdayEndTime, increment, input)
+            return
+          }
           
-          if (pickerEndHour != null && (pickerEndHour < min[0] || pickerEndHour > max[0])) {
-            pickerEnd.clear()
+          switch (data.day) {
+            case 0:
+              setNewTime(sundayStartTime, weekdayEndTime, increment, input)
+              break
+            case 6:
+              setNewTime(saturdayStartTime, saturdayEndTime, increment, input)
+              break
+            default:
+              setNewTime(weekdayStartTime, weekdayEndTime, increment, input)
           }
         }
         
+        function getPicker(input) {
+          return (typeof input.pickadate('picker') == 'undefined') ? input.pickatime('picker') : input.pickadate('picker')
+        }
+        
+        function getSelectData(input) {
+          return getPicker(input).get('select')
+        }
     </script>
 </head>
 
