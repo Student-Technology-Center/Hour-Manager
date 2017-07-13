@@ -6,21 +6,89 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <script type="text/javascript" src="{% static 'hour_manager/js/jquery.timepicker.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'hour_manager/css/jquery.timepicker.css' %}">
+    <script src="{% static 'hour_manager/js/picker.js' %}"></script>
+    <script src="{% static 'hour_manager/js/picker.date.js' %}"></script>
+    <script src="{% static 'hour_manager/js/picker.time.js' %}"></script>
+    
+    <link rel="stylesheet" href="{% static 'hour_manager/css/default.css' %}">
+    <link rel="stylesheet" href="{% static 'hour_manager/css/default.time.css' %}">
+    <link rel="stylesheet" href="{% static 'hour_manager/css/default.date.css' %}">
 
     <link rel="stylesheet" href="{% static 'hour_manager/css/add_hour.css' %}">
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 
     <script>
+        var date_input
+        var start_time_input;
+        var end_time_input;
+        
         $(function() {
-            $("#id_date").datepicker({
-                showButtonPanel: true,
-                dateFormat: "yy-mm-dd"
-            });
-            $("#id_start_time").timepicker({ 'timeFormat': 'H:i' });
-            $("#id_end_time").timepicker({ 'timeFormat': 'H:i' });
+            var date_input = $('#id_date').pickadate({
+              onClose: function(context) {
+                date = date_input.pickadate('picker').get('select')
+                
+                if (date == null) {
+                  return
+                }
+                
+                dayOfTheWeek = date.obj.getDay()
+                
+                startTimePicker = start_time_input.pickatime('picker')
+                endTimePicker = end_time_input.pickatime('picker')
+                                
+                if (dayOfTheWeek == 0) {
+                  setNewTime([14,0], [20,0], startTimePicker, endTimePicker)
+                }
+                else if (dayOfTheWeek == 5) {
+                  setNewTime([8,0], [16,0], startTimePicker, endTimePicker)
+                }
+                else if(dayOfTheWeek == 6) {
+                  setNewTime([11,0], [17,0], startTimePicker, endTimePicker)
+                }
+                else {
+                  setNewTime([8,0], [20,0], startTimePicker, endTimePicker)
+                }
+              },
+              
+              format: 'dddd, mmmm dd, yyyy',
+              formatSubmit: 'yyyy/mm/dd',
+            })
+            
+            start_time_input = $('#id_start_time').pickatime({
+              interval: 60,
+              min: [8,0],
+              max: [20,0]
+            })
+            
+            end_time_input = $('#id_end_time').pickatime({
+              interval: 60,
+              min: [9,0],
+              max: [21,0]
+            })
         });
+        
+        function setNewTime(min, max, pickerStart, pickerEnd) {                  
+          pickerStartHour = (pickerStart.get('select') == null) ? null : pickerStart.get('select').hour
+          pickerEndHour = (pickerEnd.get('select') == null) ? null : pickerEnd.get('select').hour
+          
+          pickerStart.set('min', min)
+          pickerStart.set('max', max)
+          
+          if (pickerStartHour != null && (pickerStartHour < min[0] || pickerStartHour > max[0])) {
+            pickerStart.clear()
+          }
+          
+          min[0] = min[0] + 1
+          max[0] = max[0] + 1
+          
+          pickerEnd.set('min', min)
+          pickerEnd.set('max', max)
+          
+          if (pickerEndHour != null && (pickerEndHour < min[0] || pickerEndHour > max[0])) {
+            pickerEnd.clear()
+          }
+        }
+        
     </script>
 </head>
 
