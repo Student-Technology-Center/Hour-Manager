@@ -51,6 +51,10 @@ def AddHour(request):
     '''Page to add hours to the hour manager'''
     form = HourAddForm(request.POST or None)
 
+    print(request.POST.get('date'))
+    print(request.POST.get('start_time'))
+    print(request.POST.get('end_time'))
+
     if form.is_valid():
         instance = form.save(commit=False)
         instance.username = request.user.username
