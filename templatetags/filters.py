@@ -15,8 +15,8 @@ def time_format(value):
     tod = ""
 
     if int(time[0]) >= 12:
-        tod = "P.M."
+        tod = "PM"
     else:
-        tod = "A.M."
+        tod = "AM"
 
     return "{}:{} {}".format(time[0][1] if time[0][0] == '0' else time[0], time[1], tod)
