@@ -19,4 +19,4 @@ def time_format(value):
     else:
         tod = "AM"
 
-    return "{}:{} {}".format(time[0][1] if time[0][0] == '0' else time[0], time[1], tod)
+    return "{}:{} {}".format("12" if time[0] == "00" else (time[0][1] if time[0][0] == '0' else time[0]), time[1], tod)
