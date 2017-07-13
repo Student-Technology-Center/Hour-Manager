@@ -14,9 +14,20 @@ def time_format(value):
     time = value.split(':')
     tod = ""
 
-    if int(time[0]) >= 12:
+    hour = time[0]
+    minutes = time[1]
+
+    int_hour = int(hour)
+
+    if int_hour >= 12:
         tod = "PM"
+        if int_hour > 12:
+            hour = str(int_hour - 12)
     else:
         tod = "AM"
 
-    return "{}:{} {}".format("12" if time[0] == "00" else (time[0][1] if time[0][0] == '0' else time[0]), time[1], tod)
+    return "{}:{} {}".format("12" if hour == "00" else
+                             (hour[1] if hour[0] == '0' else hour),
+                             minutes,
+                             tod
+                            )
