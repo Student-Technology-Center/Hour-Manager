@@ -46,7 +46,7 @@
         {% if show_table %}
             <ul>
                 {% for i in comments %}
-                    {% if i.cover_username != user.username %}
+                    {% if i.cover_username == user.username %}
                         <li>{{ i.date }} Covered hours {{ i.start_time|time_format }} - {{ i.end_time|time_format }} for {{ i.coveree_first }} {{ i.coveree_last }}</li>
                     {% endif %}
                 {% endfor %}
