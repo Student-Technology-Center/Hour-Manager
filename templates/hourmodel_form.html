@@ -16,6 +16,14 @@
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 
     <script>
+        //So django will accept the delete request
+        function fillFields() {
+          $("#id_date").prop('disabled', true)
+          $("#id_start_time").prop('disabled', true)
+          $("#id_end_time").prop('disabled', true)
+          $("#id_reason").prop('disabled', true)
+        }
+
         // Initially the 3 global variables we want are our 3 different type of forms. These will be accessed many times
         var dateInput
         var startTimeInput
@@ -194,7 +202,11 @@
         {% csrf_token %} 
         {{ form.as_p }}
         <input type="submit" value="Submit" onclick="checkTime();"/>
+        {% if add %}
+        <input type="submit" value="Delete" name="delete" id="delete" onclick="fillFields();"/>
+        {% endif %}
     </form>
+    
 </body>
 
 </html>

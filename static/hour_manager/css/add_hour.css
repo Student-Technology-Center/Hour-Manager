@@ -115,3 +115,9 @@ form input[type='submit']:hover {
 .picker__input.picker__input--active {
   background-color: #bdd0ef;
 }
+
+#delete {
+    background-color: red;
+
+    margin-left: 15px;
+}

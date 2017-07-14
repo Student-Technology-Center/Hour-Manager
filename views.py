@@ -57,9 +57,6 @@ def AddHour(request, pk):
             "form": form
         }
 
-
-    print(request.path)
-
     if pk is None:
         print("WRONG")
         if form.is_valid():
@@ -74,6 +71,12 @@ def AddHour(request, pk):
     if pk is not None:
         print("RIGHT")
         context['add'] = True
+
+        if request.method == 'POST':
+            if request.POST.get('delete') == 'Delete':
+                old = HourModel.objects.get(pk=pk)
+                old.delete()
+                return HttpResponseRedirect("/hourmanager")
 
         if form.is_valid():
             old = HourModel.objects.get(pk=pk)
