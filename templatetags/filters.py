@@ -4,6 +4,7 @@ Here we can define custom filters for template usage
 
 from django import template
 from django.template.defaultfilters import stringfilter
+from django.contrib.auth.models import User
 from datetime import datetime, date
 
 register = template.Library()
@@ -31,3 +32,9 @@ def time_format(value):
                              minutes,
                              tod
                             )
+
+@register.filter(name='usernametoname')
+@stringfilter
+def usernametoname(value):
+    name = User.objects.get(username=value)
+    return "{} {}".format(name.first_name, name.last_name)

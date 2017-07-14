@@ -35,7 +35,7 @@
                 <td> {{i.date}} </td>
                 <td> {{i.start_time|time_format}} </td>
                 <td> {{i.end_time|time_format}} </td>
-                <td> {{i.cover_username}} </td>
+                <td> {{i.cover_username|usernametoname}} </td>
             </tr>
             {% endfor %}
         </table>
