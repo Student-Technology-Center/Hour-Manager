@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/index.css' %}">
     <script type="text/javascript" src="{% static 'hour_manager/js/index.js' %}"></script>
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
+    <script src="{% static 'hour_manager/js/update_page.js' %}"></script>
 
     {% if egg %}
         <script src="{% static 'hour_manager/js/egg.js' %}"></script>
@@ -16,6 +17,22 @@
 
     <script>
         var primary_keys = [];
+        function updateInfo() {
+            console.log("Update happened.")
+            for (i=0;i<primary_keys.length;i++) {
+                $.get("/hourmanager/api/hour/" + primary_keys[i] + "/", function(data) {
+                    $('#info_' + data.pk + " td").each(function(i, tr){
+                        if (i == 4) 
+                            $(this).text(data.end_time);
+                        if (i == 3)
+                            $(this).text(data.start_time);
+                        if (i == 2)
+                            $(this).text(data.date);
+                    });
+                });
+            }
+        }     
+        $(document).ready(setInterval(function(){updateInfo()}, 15000))
     </script>
     
 </head>
@@ -52,7 +69,7 @@
             <script>
                 primary_keys.push("{{i.pk}}");
             </script>
-            <tr class="info">
+            <tr id="info_{{ i.pk }}">
                 <td> {{i.first_name}} </td>
                 <td> {{i.last_name}} </td>
                 <td> {{i.date}} </td>
