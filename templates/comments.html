@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 
 <html>
 
@@ -45,7 +46,9 @@
         {% if show_table %}
             <ul>
                 {% for i in comments %}
-                        <li>{{ i.date }} Covered hours {{ i.start_time }} - {{ i.end_time }} for {{ i.coveree_first }} {{ i.coveree_last }}</li>
+                    {% if i.cover_username != user.username %}
+                        <li>{{ i.date }} Covered hours {{ i.start_time|time_format }} - {{ i.end_time|time_format }} for {{ i.coveree_first }} {{ i.coveree_last }}</li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         {% else %}
