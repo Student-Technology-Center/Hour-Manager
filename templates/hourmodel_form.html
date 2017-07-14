@@ -77,10 +77,23 @@
             endTimeInput = $('#id_end_time').pickatime({
               
               onOpen: function() {
-                // Upon opening we perform a check to see if start time is set, if so, we restrict our bounds 
-                // to start at 1 hour after our start time. We also do more checks which can be seen in the
-                // restrainTimeInput function
-                restrainTimeInput(endTimeInput, startTimeInput, true)
+                // We limit our end time lowerbound to our start time value
+                // So we start off by checking if our startTimeInput was even set yet...
+                if (getSelectData(startTimeInput) ==  null) {
+                  // If not, we just limit our hours due to the day
+                  limitHoursToDay(endTimeInput, true)
+                  return
+                }
+                
+                data = getSelectData(dateInput)
+                
+                // If it was set, we set our lower bound to that value and our upper bound
+                // to the end time depending on the day
+                minHour = getSelectData(startTimeInput).hour
+                maxHour = (data == null || data.day != 6) ? weekdayEndTime : saturdayEndTime
+                
+                // Set these values
+                setNewTime(minHour, maxHour, true, endTimeInput)
               },
               
               interval: 60,
@@ -104,31 +117,6 @@
           timePicker.set('max', [max, 0])
         }
         
-        // This function exists to bound a time input in relation to another 
-        // time input.
-        // TODO: A bit of this code can be scrapped, originally this was made a function 
-        // so that we can limit the upper bound of the start time input to the value of the
-        // end time current value and vice versa... but it was decided to only do this to the 
-        // end time input. The boolean after can be removed, and this can be rewritten to
-        // a few lines at most.
-        function restrainTimeInput (inputToModify, baseInput, after) {
-          // If we have no input to compare to, we just default to limiting 
-          // our hours to the day
-          if (getSelectData(baseInput) ==  null) {
-            limitHoursToDay(inputToModify, after)
-            return
-          }
-          
-          data = getSelectData(dateInput)
-          
-          // Otherwise, if we want our input to be AFTER the input we're comparing, we set
-          // our start bound to the comparative input start time + 1. Otherwise it's the other way
-          minHour = after ? getSelectData(baseInput).hour : getPicker(inputToModify).get('min').hour
-          maxHour = (data == null || data.day != 6) ? weekdayEndTime : saturdayEndTime
-          
-          // Sets the bounds with our new values
-          setNewTime(minHour, maxHour, after, inputToModify)
-        }
         
         // Similar to checkInputBounds, this instead sets the bounds of the 
         // time inputs, and doesn't care about the values
