@@ -50,22 +50,36 @@ def index(request):
     )
 
 @login_required
-def AddHour(request):
+def AddHour(request, pk=None):
     '''Page to add hours to the hour manager'''
     form = HourAddForm(request.POST or None)
-
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.username = request.user.username
-        instance.first_name = request.user.first_name
-        instance.last_name = request.user.last_name
-        instance.save()
-        print("HOUR ADDED WITH PK: {}".format(instance.pk))
-        return HttpResponseRedirect("/hourmanager")
-
     context = {
-        "form": form
-    }
+            "form": form
+        }
+
+    if pk is None:
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.username = request.user.username
+            instance.first_name = request.user.first_name
+            instance.last_name = request.user.last_name
+            instance.save()
+            print("HOUR ADDED WITH PK: {}".format(instance.pk))
+            return HttpResponseRedirect("/hourmanager")
+
+    if pk is not None:
+
+        context['add'] = True
+
+        if form.is_valid():
+            instance = HourModel.objects.get(pk=pk)
+            instance.date = form.cleaned_data.get('date')
+            instance.start_time = form.cleaned_data.get('start_time')
+            instance.end_time = form.cleaned_data.get('end_time')
+            instance.reason = form.cleaned_data.get('reason')
+            instance.save()
+            return HttpResponseRedirect("/hourmanager")
 
     return render(
         request,
@@ -126,11 +140,6 @@ def comments(request):
         "comments.html",
         context
     )
-
-@login_required
-def edit(request, pk):
-    raise NotImplementedError("This page is in progress.")
-    return None
 
 def history(request):
 
