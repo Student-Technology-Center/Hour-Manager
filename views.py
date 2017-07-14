@@ -3,7 +3,7 @@ from datetime import datetime
 from random import randint
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 from hour_manager.models import HourModel, hour_history
@@ -11,6 +11,7 @@ from hour_manager.models import HourModel, hour_history
 from .forms import HourAddForm
 
 from datetime import date
+import json
 
 @login_required
 def index(request):
@@ -29,6 +30,8 @@ def index(request):
     #Remove all previous dates, everytime someone loads the page
     for i in hours:
         if (i.date < current_date and i.start_time < current_time):
+            i.delete()
+        if i.pk is None:
             i.delete()
 
     if request.method == "POST":
@@ -57,6 +60,7 @@ def AddHour(request):
         instance.first_name = request.user.first_name
         instance.last_name = request.user.last_name
         instance.save()
+        print("HOUR ADDED WITH PK: {}".format(instance.pk))
         return HttpResponseRedirect("/hourmanager")
 
     context = {

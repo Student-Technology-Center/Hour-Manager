@@ -1,5 +1,5 @@
 '''Sub URLS from the hour manager'''
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from hour_manager.views import index, AddHour, claim_page, history, comments, edit
 
@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^history/', history, name="history"),
     url(r'^comments/', comments, name="comments"),
     url(r'^edit/(?P<pk>\d+)/$', edit, name='edit'),
+    url(r'^api/', include('hour_manager.api_urls'))
 ]

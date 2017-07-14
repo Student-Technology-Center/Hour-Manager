@@ -13,6 +13,10 @@
     {% if egg %}
         <script src="{% static 'hour_manager/js/egg.js' %}"></script>
     {% endif %}
+
+    <script>
+        var primary_keys = [];
+    </script>
     
 </head>
 
@@ -45,6 +49,9 @@
                 <th>Claim/Delete</th>
             </tr>
             {% for i in hours %}
+            <script>
+                primary_keys.push("{{i.pk}}");
+            </script>
             <tr class="info">
                 <td> {{i.first_name}} </td>
                 <td> {{i.last_name}} </td>
