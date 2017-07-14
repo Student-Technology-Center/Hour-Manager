@@ -190,7 +190,7 @@
         <a href="{% url 'comments' %}"> Generate comments </a>
         <a href="{% url 'main_page:index' %}" id="main"> Home </a>
     </div>
-    <form method="POST" action=".">
+    <form method="POST" action="">
         {% csrf_token %} 
         {{ form.as_p }}
         <input type="submit" value="Submit" onclick="checkTime();"/>

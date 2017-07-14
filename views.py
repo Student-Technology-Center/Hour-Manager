@@ -50,15 +50,18 @@ def index(request):
     )
 
 @login_required
-def AddHour(request, pk=None):
+def AddHour(request, pk):
     '''Page to add hours to the hour manager'''
     form = HourAddForm(request.POST or None)
     context = {
             "form": form
         }
 
-    if pk is None:
 
+    print(request.path)
+
+    if pk is None:
+        print("WRONG")
         if form.is_valid():
             instance = form.save(commit=False)
             instance.username = request.user.username
@@ -69,16 +72,21 @@ def AddHour(request, pk=None):
             return HttpResponseRedirect("/hourmanager")
 
     if pk is not None:
-
+        print("RIGHT")
         context['add'] = True
 
         if form.is_valid():
-            instance = HourModel.objects.get(pk=pk)
-            instance.date = form.cleaned_data.get('date')
-            instance.start_time = form.cleaned_data.get('start_time')
-            instance.end_time = form.cleaned_data.get('end_time')
-            instance.reason = form.cleaned_data.get('reason')
-            instance.save()
+            old = HourModel.objects.get(pk=pk)
+
+            if request.user.username != old.username:
+                print("Wrong place.")
+                return HttpResponseRedirect("/hourmanager")
+
+            old.date = form.cleaned_data.get('date')
+            old.start_time = form.cleaned_data.get('start_time')
+            old.end_time = form.cleaned_data.get('end_time')
+            old.reason = form.cleaned_data.get('reason')
+            old.save()
             return HttpResponseRedirect("/hourmanager")
 
     return render(
