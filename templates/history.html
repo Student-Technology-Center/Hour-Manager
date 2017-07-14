@@ -32,8 +32,8 @@
                 <td> {{i.coveree_first}} </td>
                 <td> {{i.coveree_last}} </td>
                 <td> {{i.date}} </td>
-                <td> {{i.start_time}} </td>
-                <td> {{i.end_time}} </td>
+                <td> {{i.start_time|time_format}} </td>
+                <td> {{i.end_time|time_format}} </td>
                 <td> {{i.cover_username}} </td>
             </tr>
             {% endfor %}
