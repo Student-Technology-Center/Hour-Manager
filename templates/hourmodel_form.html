@@ -34,6 +34,8 @@
             dateInput = $('#id_date').pickadate({
               onClose: function() {   
                 //getPicker(startTimeInput).open()
+                checkInputBounds(startTimeInput, false)
+                checkInputBounds(endTimeInput, true)
               },
               
               format: 'dddd, mmmm dd, yyyy',
@@ -54,7 +56,10 @@
                 endData = getSelectData(endTimeInput)
                 
                 if (startData != null && endData != null) {
-                  getPicker(endTimeInput).clear()
+                  
+                  if (endData.hour <= startData.hour) {
+                    getPicker(endTimeInput).clear()
+                  }
                 }
                 
                 //getPicker(endTimeInput).open()
@@ -97,8 +102,10 @@
             return
           }
           
+          data = getSelectData(dateInput)
+          
           minHour = after ? getSelectData(baseInput).hour : getPicker(inputToModify).get('min').hour
-          maxHour = after ? getPicker(inputToModify).get('max').hour : getSelectData(baseInput).hour
+          maxHour = (data == null || data.day != 6) ? weekdayEndTime : saturdayEndTime
           
           setNewTime(minHour, maxHour, after, inputToModify)
         }
@@ -119,6 +126,23 @@
               break
             default:
               setNewTime(weekdayStartTime, weekdayEndTime, increment, input)
+          }
+        }
+        
+        function checkInputBounds(input, endTime) {
+          data = getSelectData(dateInput)
+          
+          if (data == null || getSelectData(input) == null || (data.day != 0 && data.day != 6)) {
+            return
+          }
+          
+          min = (data.day == 0) ? sundayStartTime : saturdayStartTime
+          max = (data.day == 0) ? weekdayEndTime : saturdayEndTime
+          
+          currentValue = getSelectData(input).hour
+          
+          if (currentValue < min || (endTime ? currentValue > max : currentValue >= max)) {
+            getPicker(input).clear()
           }
         }
         
