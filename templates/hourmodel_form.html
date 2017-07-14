@@ -16,10 +16,12 @@
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 
     <script>
+        // Initially the 3 global variables we want are our 3 different type of forms. These will be accessed many times
         var dateInput
         var startTimeInput
         var endTimeInput;
         
+        // In military time, this represents the starting and ending time of variable days. 
         weekdayStartTime = 8
         weekdayEndTime = 21
         
@@ -31,23 +33,26 @@
         // sundayEndTime = 21
         
         $(function() {
+            // Define our dateInput (calandar)
             dateInput = $('#id_date').pickadate({
               onClose: function() {   
-                //getPicker(startTimeInput).open()
+                // On close we want to peform a quick check on our start time and end time forms to see if they are still within bounds.
                 checkInputBounds(startTimeInput, false)
                 checkInputBounds(endTimeInput, true)
               },
               
+              // Formatting for how we present the data and how the backend receives the data
               format: 'dddd, mmmm dd, yyyy',
               formatSubmit: 'yyyy/mm/dd',
               formatSubmit: 'yyyy-mm-dd',
               hiddenSuffix: ''
             })
             
-            dateInput.type = "date"
-            
+            // Define our startTimeInput (Start of shift)
             startTimeInput = $('#id_start_time').pickatime({
               onOpen: function() {
+                // Upon opening, we peform a check to see what our min and max should be due to the date.
+                // It'll be more clear in endTimeInput on why we do this upon opening of the form
                 limitHoursToDay(startTimeInput, false)
               },
               
@@ -55,48 +60,60 @@
                 startData = getSelectData(startTimeInput)
                 endData = getSelectData(endTimeInput)
                 
-                if (startData != null && endData != null) {
-                  
-                  if (endData.hour <= startData.hour) {
-                    getPicker(endTimeInput).clear()
-                  }
+                // Assuming that the start time was set, we do a quick quick against our end time. 
+                // If end time is set and bigger or equal to our new start time, we wipe it
+                if ((startData != null && endData != null) && (endData.hour <= startData.hour)) {
+                  getPicker(endTimeInput).clear()
                 }
-                
-                //getPicker(endTimeInput).open()
               },
               
+              // Shifts are listed every hour, aka 60 minutes
               interval: 60,
               formatSubmit: 'HH:i',
               hiddenSuffix: ''
             })
             
+            // Define our endTimeInput (End of shift)
             endTimeInput = $('#id_end_time').pickatime({
               
               onOpen: function() {
+                // Upon opening we perform a check to see if start time is set, if so, we restrict our bounds 
+                // to start at 1 hour after our start time. We also do more checks which can be seen in the
+                // restrainTimeInput function
                 restrainTimeInput(endTimeInput, startTimeInput, true)
               },
               
-              min: [weekdayStartTime, 0],
-              max: [weekdayEndTime, 0],
               interval: 60,
               formatSubmit: 'HH:i',
               hiddenSuffix: ''
             })
-            
-            startTimeInput.type = endTimeInput.type = "time"
         });
         
         function setNewTime(min, max, increment, timeInput) {
           timePicker = getPicker(timeInput)
           
+          // If we're dealing with our end time, the start time bound is 1 hour more
+          // (can't end your shift at the very first hour)
+          // Otherwise, our end time bound is hour less
+          // (can't start your shift at the very last hour)
           min = increment ? min + 1 : min
           max = increment ? max : max - 1
           
+          // Sets our bounds to the time forms
           timePicker.set('min', [min, 0])
           timePicker.set('max', [max, 0])
         }
         
+        // This function exists to bound a time input in relation to another 
+        // time input.
+        // TODO: A bit of this code can be scrapped, originally this was made a function 
+        // so that we can limit the upper bound of the start time input to the value of the
+        // end time current value and vice versa... but it was decided to only do this to the 
+        // end time input. The boolean after can be removed, and this can be rewritten to
+        // a few lines at most.
         function restrainTimeInput (inputToModify, baseInput, after) {
+          // If we have no input to compare to, we just default to limiting 
+          // our hours to the day
           if (getSelectData(baseInput) ==  null) {
             limitHoursToDay(inputToModify, after)
             return
@@ -104,19 +121,28 @@
           
           data = getSelectData(dateInput)
           
+          // Otherwise, if we want our input to be AFTER the input we're comparing, we set
+          // our start bound to the comparative input start time + 1. Otherwise it's the other way
           minHour = after ? getSelectData(baseInput).hour : getPicker(inputToModify).get('min').hour
           maxHour = (data == null || data.day != 6) ? weekdayEndTime : saturdayEndTime
           
+          // Sets the bounds with our new values
           setNewTime(minHour, maxHour, after, inputToModify)
         }
         
+        // Similar to checkInputBounds, this instead sets the bounds of the 
+        // time inputs, and doesn't care about the values
+        // Increment is a boolean not used in this function, but will be passed simply
+        // to see if this is our end time form, if so, we need to do some math with it...
         function limitHoursToDay(input, increment) {
+          // If no calandar day was set, we default to normal week day hours
           data = getSelectData(dateInput)
           if (data == null) {
             setNewTime(weekdayStartTime, weekdayEndTime, increment, input)
             return
           }
           
+          // We set new bounds depending on the day...
           switch (data.day) {
             case 0:
               setNewTime(sundayStartTime, weekdayEndTime, increment, input)
@@ -129,27 +155,39 @@
           }
         }
         
-        function checkInputBounds(input, endTime) {
+        // Checks to see if the input time value is valid
+        // a boolean is also passed (isEndTime), this is due to the fact that
+        // the start time cannot be the very last hour, but our end time can
+        function checkInputBounds(input, isEndTime) {
           data = getSelectData(dateInput)
           
+          // If our data is null, meaning that the calandar value was not set
+          // or if the time form we're checking doesnt have a value
+          // or if it's not saturday or sunday, we simply return. 
           if (data == null || getSelectData(input) == null || (data.day != 0 && data.day != 6)) {
             return
           }
           
+          // Otherwise, we set up some bounds to compare to depending on the day...
           min = (data.day == 0) ? sundayStartTime : saturdayStartTime
           max = (data.day == 0) ? weekdayEndTime : saturdayEndTime
           
           currentValue = getSelectData(input).hour
           
-          if (currentValue < min || (endTime ? currentValue > max : currentValue >= max)) {
+          // If the current time value is out of bounds, we clear it
+          if (currentValue < min || (isEndTime ? currentValue > max : currentValue >= max)) {
             getPicker(input).clear()
           }
         }
         
+        // Rather than constantly specifically choose which picker we're using and typing so much, 
+        // this method does those checks for us and return a picker. Pickers can be considered as
+        // the form handle
         function getPicker(input) {
           return (typeof input.pickadate('picker') == 'undefined') ? input.pickatime('picker') : input.pickadate('picker')
         }
         
+        // This gets the data of a input, such as day and hours. This can be null
         function getSelectData(input) {
           return getPicker(input).get('select')
         }
