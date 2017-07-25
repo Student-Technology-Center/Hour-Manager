@@ -1,18 +1,15 @@
 '''Hour manager sub directory views stored here'''
-from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
-from hour_manager.models import HourModel, hour_history
+from django.http import JsonResponse
+from hour_manager.models import HourModel
 
-import json
 
 @login_required
-def hour(request, pk):
+def spec_hour(request, pk):
     hour = HourModel.objects.get(pk=pk)
-    print(hour.start_time.strftime('%I:%M %p') if hour.start_time.strftime('%I:%M %p')[0] != "0" else hour.start_time.strftime('%I:%M %p')[1:])
     return JsonResponse(
         {
-            "pk":hour.pk,
+            "pk":str(hour.pk),
             "username":hour.username,
             "first_name":hour.first_name,
             "last_name":hour.last_name,

@@ -1,16 +1,15 @@
 '''Hour manager sub directory views stored here'''
 from datetime import datetime
 from random import randint
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-
 from hour_manager.models import HourModel, hour_history
-
+from login.models import UserOptions, UserOptionsForm
+from django.contrib.auth.models import User
 from .forms import HourAddForm
-
 from datetime import date
+from utils.alerts.alerter import email
 import json
 
 @login_required
@@ -58,18 +57,25 @@ def AddHour(request, pk):
         }
 
     if pk is None:
-        print("WRONG")
         if form.is_valid():
             instance = form.save(commit=False)
             instance.username = request.user.username
             instance.first_name = request.user.first_name
             instance.last_name = request.user.last_name
             instance.save()
-            print("HOUR ADDED WITH PK: {}".format(instance.pk))
+            
+            #Alert all members that opted in for emails.
+            for user in User.objects.all():
+                options = UserOptions.objects.get(user=user)
+                if options.email:
+                    message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(user.first_name, user.last_name, 
+                                                                                                                        instance.start_time, instance.end_time,
+                                                                                                                        instance.date, instance.reason)
+                    email(user.email, "[STC] News hours on {}!".format(instance.date), message)
+
             return HttpResponseRedirect("/hourmanager")
 
     if pk is not None:
-        print("RIGHT")
         context['add'] = True
 
         if request.method == 'POST':
@@ -82,7 +88,6 @@ def AddHour(request, pk):
             old = HourModel.objects.get(pk=pk)
 
             if request.user.username != old.username:
-                print("Wrong place.")
                 return HttpResponseRedirect("/hourmanager")
 
             old.date = form.cleaned_data.get('date')
