@@ -75,10 +75,10 @@ def AddHour(request, pk):
             for user in User.objects.all():
                 options = UserOptions.objects.get_or_create(user=user)
 
-                print("{} - Texting: {} Email: {}.".format(user.username, options[0].texting, options[0].email))
-
-                if not options[1]:
+                if options[1]:
                     logger.warn("Had to create UserOptions for {}.".format(user.username))
+
+                print("{} - Texting: {} Email: {}.".format(user.username, options[0].texting, options[0].email))
 
                 if options[0].email:
                     message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(instance.first_name, instance.last_name, 
@@ -86,6 +86,8 @@ def AddHour(request, pk):
                                                                                                                         instance.date, instance.reason)
                     #email(user.email, "[STC] News hours on {}!".format(instance.date), message)
                     logger.info("Emailed user {} that a new hour is up!".format(user.username))
+                    print("Emailed user {} that a new hour is up!".format(user.username))
+                    print("{}".format(message))
 
             return HttpResponseRedirect("/hourmanager")
 
