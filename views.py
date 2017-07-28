@@ -1,16 +1,23 @@
 '''Hour manager sub directory views stored here'''
 from datetime import datetime
 from random import randint
+from datetime import date
+import logging
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
+from django.contrib.auth.models import User
 from django.shortcuts import render
+
 from hour_manager.models import HourModel, hour_history
 from login.models import UserOptions, UserOptionsForm
-from django.contrib.auth.models import User
 from .forms import HourAddForm
-from datetime import date
+
 from utils.alerts.alerter import email
-import json
+
+#Creates a global logger object.
+logger = logging.getLogger(__name__)
 
 @login_required
 def index(request):
@@ -66,7 +73,11 @@ def AddHour(request, pk):
             
             #Alert all members that opted in for emails.
             for user in User.objects.all():
-                options = UserOptions.objects.get(user=user)
+                try:
+                    options = UserOptions.objects.get(user=user)
+                except UserOptions.DoesNotExist:
+                    logger.error("User {} has no query set for UserOptions!".format(user.username))
+
                 if options.email:
                     message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(user.first_name, user.last_name, 
                                                                                                                         instance.start_time, instance.end_time,
