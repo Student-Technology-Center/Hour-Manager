@@ -73,19 +73,16 @@ def AddHour(request, pk):
             
             #Alert all members that opted in for emails.
             for user in User.objects.all():
-                try:
-                    options = UserOptions.objects.get(user=user)
-                    print("{} | {}".format(options.email, options.texting))
-                except UserOptions.DoesNotExist:
-                    logger.error("User {} has no query set for UserOptions! Creating one.".format(user.username))
-                    UserOptions.objects.create_options(user=user)
+                options = UserOptions.objects.get_or_create(user=user)
 
-                if options.email:
+                if not options[1]:
+                    logger.warn("Had to create UserOptions for {}.".format(user.username))
+
+                if options[0].email:
                     message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(instance.first_name, instance.last_name, 
                                                                                                                         instance.start_time, instance.end_time,
                                                                                                                         instance.date, instance.reason)
                     #email(user.email, "[STC] News hours on {}!".format(instance.date), message)
-                    print("{}".format(message))
                     logger.info("Emailed user {} that a new hour is up!".format(user.username))
 
             return HttpResponseRedirect("/hourmanager")
