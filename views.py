@@ -84,6 +84,7 @@ def AddHour(request, pk):
                                                                                                                         instance.start_time, instance.end_time,
                                                                                                                         instance.date, instance.reason)
                     email(user.email, "[STC] News hours on {}!".format(instance.date), message)
+                    logger.info("Emailed user {} that a new hour is up!".format(user.username))
 
             return HttpResponseRedirect("/hourmanager")
 
