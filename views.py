@@ -2,6 +2,7 @@
 from datetime import datetime
 from random import randint
 from datetime import date
+import threading
 import logging
 import json
 
@@ -71,21 +72,8 @@ def AddHour(request, pk):
             instance.last_name = request.user.last_name
             instance.save()
             
-            #Alert all members that opted in for emails.
-            for user in User.objects.all():
-                options = UserOptions.objects.get_or_create(user=user)
-
-                if options[1]:
-                    logger.warn("Had to create UserOptions for {}.".format(user.username))
-
-                print("{} - Texting: {} Email: {}.".format(user.username, options[0].texting, options[0].email))
-
-                if options[0].email:
-                    message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(instance.first_name, instance.last_name, 
-                                                                                                                        instance.start_time, instance.end_time,
-                                                                                                                        instance.date, instance.reason)
-                    email(user.email, "[STC] News hours on {}!".format(instance.date), message)
-                    logger.info("Emailed user {} that a new hour is up!".format(user.username))
+            email_thread = threading.Thread(target=email_threaded_helper, args=(instance,))
+            email_thread.start()
 
             return HttpResponseRedirect("/hourmanager")
 
@@ -182,3 +170,21 @@ def history(request):
         "history.html",
         context
     )
+
+#View helper functions down here, please don't include real views
+def email_threaded_helper(instance):
+    #Alert all members that opted in for emails.
+    for user in User.objects.all():
+        options = UserOptions.objects.get_or_create(user=user)
+
+        if options[1]:
+            logger.warn("Had to create UserOptions for {}.".format(user.username))
+
+        print("{} - Texting: {} Email: {}.".format(user.username, options[0].texting, options[0].email))
+
+        if options[0].email:
+            message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(instance.first_name, instance.last_name, 
+                                                                                                                instance.start_time, instance.end_time,
+                                                                                                                instance.date, instance.reason)
+            email(user.email, "[STC] News hours on {}!".format(instance.date), message)
+            logger.info("Emailed user {} that a new hour is up!".format(user.username))
