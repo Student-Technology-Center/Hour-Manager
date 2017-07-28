@@ -6,7 +6,14 @@ from hour_manager.models import HourModel
 
 @login_required
 def spec_hour(request, pk):
-    hour = HourModel.objects.get(pk=pk)
+    try:
+        hour = HourModel.objects.get(pk=pk)
+    except HourModel.DoesNotExist:
+        return JsonResponse(
+            {
+                "message":"This hour does not exist."
+            }
+        )
     return JsonResponse(
         {
             "pk":str(hour.pk),
