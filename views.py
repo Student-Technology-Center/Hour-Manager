@@ -76,7 +76,8 @@ def AddHour(request, pk):
                 try:
                     options = UserOptions.objects.get(user=user)
                 except UserOptions.DoesNotExist:
-                    logger.error("User {} has no query set for UserOptions!".format(user.username))
+                    logger.error("User {} has no query set for UserOptions! Creating one.".format(user.username))
+                    UserOptions.objects.create(user=user)
 
                 if options.email:
                     message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(user.first_name, user.last_name, 
