@@ -75,6 +75,8 @@ def AddHour(request, pk):
             for user in User.objects.all():
                 options = UserOptions.objects.get_or_create(user=user)
 
+                print("{} - Texting: {} Email: {}.".format(user.username, options[0].texting, options[0].email))
+
                 if not options[1]:
                     logger.warn("Had to create UserOptions for {}.".format(user.username))
 
