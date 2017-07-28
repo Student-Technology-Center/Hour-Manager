@@ -84,10 +84,8 @@ def AddHour(request, pk):
                     message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(instance.first_name, instance.last_name, 
                                                                                                                         instance.start_time, instance.end_time,
                                                                                                                         instance.date, instance.reason)
-                    #email(user.email, "[STC] News hours on {}!".format(instance.date), message)
+                    email(user.email, "[STC] News hours on {}!".format(instance.date), message)
                     logger.info("Emailed user {} that a new hour is up!".format(user.username))
-                    print("Emailed user {} that a new hour is up!".format(user.username))
-                    print("{}".format(message))
 
             return HttpResponseRedirect("/hourmanager")
 
