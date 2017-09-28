@@ -22,17 +22,6 @@ class HourAddForm(forms.ModelForm):
 
         date_obj = datetime.now()
         current_time = date_obj.time()
-        current_date = date_obj.date()
-
-        if date == current_date and start_time < current_time:
-            raise forms.ValidationError(
-                    "Please enter a valid time"
-                )
-
-        if date < current_date:
-            raise forms.ValidationError(
-                    "Please enter a day after today's date"
-                )
 
         if end_time < start_time:
             raise forms.ValidationError(
