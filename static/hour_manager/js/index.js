@@ -1,5 +1,3 @@
-var editting = false;
-
 $(document).ready(function(){
     $("tr").mouseover(function() {
         $(this).find('.reasontd').css({
@@ -11,13 +9,7 @@ $(document).ready(function(){
             "opacity":"0"
         });
     })
-    /*
-    $("#editbtn").click(function(){
-        if (editting)
-            $("#editform").css({"display":"none","opacity":"0"});
-        else
-            $("#editform").css({"display":"block", "opacity":"1"});
-        editting = !editting;
-    });
-    */
+    $("#menu ul li").click(function() {
+        window.location = $(this).children()[0].href;
+    })
 });

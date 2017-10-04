@@ -6,6 +6,12 @@ html {
     font-family: sans-serif;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #1F3140;
+}
+
 #nohours {
    display: flex;
    align-content: center;
@@ -28,59 +34,24 @@ html {
     padding: 12px;
 }
 
-.menu {
-    border-right: 1px solid white;
-
-    max-width: 200px;
-    height: 100%;
-    width: 0%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #3F637F;
-    overflow-x: hidden;
-    transition: 0.5s;
-}
-
-.menu a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: white;
-    display: block;
-
-    opacity: 0;
-
-    transition: 0.3s;
-    border-bottom: 1px solid white;
-}
-
-.menu a:hover {
-    color: #bdd0ef;
-}
-
-body {
-    background-color: #1F3140;
-}
-
-.hourtable {
-    border-collapse: collapse;
-
-    position: fixed;
+#hoursdiv {
+    margin-left: auto;
+    margin-right: auto;
 
     display: flex;
     justify-content: center;
     align-content: center;
 
+    height: 100%;
     width: 50%;
 }
 
-#hoursdiv {
-    margin-left: auto;
-    margin-right: auto;
+.hourtable {
+    border-collapse: collapse;
+    height: 75%;
 
-    width: 50%;
+    position: relative;
+    overflow: hidden;
 }
 
 td:not(.reasontd) {
@@ -142,14 +113,8 @@ tr:hover {
     color: black;
 }
 
-#main {
-    position: absolute;
-
-    border-top: 1px solid white;
-    border-bottom: none;
-
-    float: bottom;
-    bottom: 0;
-
-    width: 100%;
+#info-panel {
+    background-color: white;
+    float: right;
+    position: fixed;
 }

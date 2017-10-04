@@ -7,6 +7,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
     
     <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/menu.css' %}">
     <script type="text/javascript" src="{% static 'hour_manager/js/index.js' %}"></script>
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
     <script src="{% static 'hour_manager/js/update_page.js' %}"></script>
@@ -26,24 +27,34 @@
                             $(this).text(data.end_time);
                         if (i == 3)
                             $(this).text(data.start_time);
-                        if (i == 2)
-                            $(this).text(data.date);
+                        if (i == 2) {
+                            /* Need to properly update date */
+                            var date = data.date;
+                            var restOfString = date.indexOf(" ");
+                            var currentDate = date.slice(0, 3) + "." + date.slice(restOfString);
+                            if (currentDate.slice(5, 6) == "0") {
+                                currentDate = currentDate.slice(0, 5) + currentDate.slice(6);
+                            }
+                            $(this).text(currentDate);
+                        }
                     });
                 });
             }
         }     
-        $(document).ready(setInterval(function(){updateInfo()}, 15000))
+        $(document).ready(setInterval(function(){updateInfo()}, 1500))
     </script>
     
 </head>
 
-<body id="hourbody">
-    <div class="menu">
-        <a href="{% url 'index' %}"> Hour page </a>
-        <a href="{% url 'AddHour' %}"> Give hours </a>
-        <a href="{% url 'history' %}"> History page </a>
-        <a href="{% url 'comments' %}"> Generate comments </a>
-        <a href="{% url 'main_page:index' %}" id="main"> Home </a>
+<body>
+    <div id="menu">
+        <ul>
+            <li><a href="{% url 'index' %}" class='menu_link'> Hours </a></li>
+            <li><a href="{% url 'AddHour' %}" class='menu_link'> Give </a></li>
+            <li><a href="{% url 'history' %}" class='menu_link'> History </a></li>
+            <li><a href="{% url 'comments' %}" class='menu_link'> Comments </a> </li>
+            <li><a href="{% url 'main_page:index' %}" class='menu_link'> Home </a></li>
+        </ul>
     </div>
     {% if any_hours %}
     
@@ -91,6 +102,9 @@
             {% endfor %}
         </table>
     </div>
+        <div id='info-panel'>
+            Hello my dudes.
+        </div>
     {% endif %}
 </body>
 
