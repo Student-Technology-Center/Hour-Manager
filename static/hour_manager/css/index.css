@@ -2,6 +2,10 @@
 
 /* Sorry bout the link :) */
 
+body {
+    margin: 0;
+}
+
 html {
     font-family: sans-serif;
 }
@@ -34,9 +38,46 @@ body {
     padding: 12px;
 }
 
-#hoursdiv {
-    margin-left: auto;
-    margin-right: auto;
+.menu {
+    border-right: 1px solid white;
+
+    max-width: 200px;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #3F637F;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+
+    opacity: 1;
+
+    transition: 0.3s;
+    border-bottom: 1px solid white;
+}
+
+.menu a:hover {
+    color: #bdd0ef;
+}
+
+body {
+    background-color: #1F3140;
+}
+
+.hourtable {
+    border-collapse: collapse;
+
+    position: fixed;
 
     display: flex;
     justify-content: center;
@@ -113,8 +154,32 @@ tr:hover {
     color: black;
 }
 
+<<<<<<< Updated upstream
 #info-panel {
     background-color: white;
     float: right;
     position: fixed;
+=======
+#main {
+    position: absolute;
+
+    border-top: 1px solid white;
+    border-bottom: none;
+
+    float: bottom;
+    bottom: 0;
+
+    width: 100%;
+}
+
+#info-tab {
+    width: 200px;
+    border-left: 1px solid white;
+    height: 100%;
+
+    right: 0;
+    float: right;
+
+    background-color: #3F637F;
+>>>>>>> Stashed changes
 }
