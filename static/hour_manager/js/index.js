@@ -1,15 +1,9 @@
 $(document).ready(function(){
-    $("tr").mouseover(function() {
-        $(this).find('.reasontd').css({
-            "opacity":"1",
-        });
-    })
-    $("tr").mouseout(function(){
-        $(this).find('.reasontd').css({
-            "opacity":"0"
-        });
-    })
-    $("#menu ul li").click(function() {
-        window.location = $(this).children()[0].href;
+    $('tr').click(function(data) {
+        //Gives the reason 
+        console.log(data.currentTarget.children[6].innerHTML);
+
+        //Gives claim link
+        console.log(data.currentTarget.children[5].children[0].getAttribute('href'))
     })
 });

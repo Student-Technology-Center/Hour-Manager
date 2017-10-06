@@ -36,13 +36,8 @@ def index(request):
 
     #Remove all previous dates, everytime someone loads the page
     for i in hours:
-        if (i.date < current_date and i.start_time < current_time):
+        if (i.date < current_date and i.start_time < current_time and i.pk is not None):
             i.delete()
-        if i.pk is None:
-            i.delete()
-
-    if request.method == "POST":
-        return "Hey."
 
     context = {
         "hours":hours,

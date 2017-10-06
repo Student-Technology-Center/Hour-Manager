@@ -23,76 +23,18 @@ body {
    color: white;
 }
 
-.reasontd {
-    opacity: 0;
-
-    position: absolute;
-
-    color: white;
-
-    background-color: #3F637F;
-
-    border-top: 1px solid white;
-    
-
-    padding: 12px;
-}
-
-.menu {
-    border-right: 1px solid white;
-
-    max-width: 200px;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #3F637F;
-    overflow-x: hidden;
-    transition: 0.5s;
-}
-
-.menu a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: white;
-    display: block;
-
-    opacity: 1;
-
-    transition: 0.3s;
-    border-bottom: 1px solid white;
-}
-
-.menu a:hover {
-    color: #bdd0ef;
-}
-
-body {
-    background-color: #1F3140;
-}
-
 .hourtable {
     border-collapse: collapse;
-
-    position: fixed;
-
-    display: flex;
-    justify-content: center;
-    align-content: center;
-
-    height: 100%;
     width: 50%;
+
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
-.hourtable {
-    border-collapse: collapse;
-    height: 75%;
-
-    position: relative;
-    overflow: hidden;
+td {
+    padding: 0;
+    height: 50px;
 }
 
 td:not(.reasontd) {
@@ -101,16 +43,9 @@ td:not(.reasontd) {
     min-width: 100px;
 }
 
-th, td, {
-    padding: 12px;
-    display: block;
-}
-
 th {
     background-color: #71B2E5;
     color: white;
-
-    padding: 15px;
     border-bottom: 1px solid white;
 }
 
@@ -121,31 +56,15 @@ td:not(.reasontd) {
 tr {
     color: white;
     height: 50px;
-}
-
-tr:nth-child(even){
+    
     background-color: #3F637F;
-}
-
-tr:nth-child(odd){
-    background-color: #5E94BF;
 }
 
 tr:hover {
     transition: 0.5s;
     color: #bdd0ef;
-}
 
-#editbtn,
-#claimbtn {
-  margin-left: auto;
-  padding: 12px;
-  border: none;
-  background: #808080;
-  color: #fff;
-  cursor: pointer;
-
-  transition: .3s;
+    cursor: pointer;
 }
 
 #editbtn:hover,
@@ -154,12 +73,6 @@ tr:hover {
     color: black;
 }
 
-<<<<<<< Updated upstream
-#info-panel {
-    background-color: white;
-    float: right;
-    position: fixed;
-=======
 #main {
     position: absolute;
 
@@ -172,6 +85,54 @@ tr:hover {
     width: 100%;
 }
 
+#menu {
+    border-right: 1px solid white;
+
+    max-width: 200px;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #3F637F;
+    overflow-x: hidden;
+    transition: 0.5s;
+
+    margin: 0;
+    position: fixed;
+}
+
+.menu_link {
+    padding-left: 6px;
+}
+
+#menu ul {
+    padding-left: 0;
+    margin-top: 0;
+}
+
+#menu ul li {
+    list-style: none;
+    padding-left: 0;
+}
+
+#menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+
+    opacity: 1;
+
+    transition: 0.3s;
+    border-bottom: 1px solid white;
+}
+
+#menu a:hover {
+    color: #bdd0ef;
+}
+
 #info-tab {
     width: 200px;
     border-left: 1px solid white;
@@ -180,6 +141,6 @@ tr:hover {
     right: 0;
     float: right;
 
+    position: fixed;
     background-color: #3F637F;
->>>>>>> Stashed changes
 }
