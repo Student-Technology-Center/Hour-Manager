@@ -143,4 +143,45 @@ tr:hover {
 
     position: fixed;
     background-color: #3F637F;
+    color: white;
+
+    text-align: center;
+}
+
+#claim-button {
+    height: 75px;
+    width: 150px;
+
+    background-color: grey;
+    color: white;
+    padding: 0;
+}
+
+#info-reason p,
+#info-reason h2 {
+    color: white;
+}
+
+#info-time hr {
+    width: 100%;
+}
+
+#info-reason h2 {
+    margin-top: 0;
+}
+
+#start_time {
+    margin-top: 6px;
+    border-radius: 10px;
+    text-align: center;
+    width: 150px;
+    height: 75px;
+}
+
+#end_time {
+    margin-top: 6px;
+    border-radius: 10px;
+    text-align: center;
+    width: 150px;;
+    height: 75px;
 }

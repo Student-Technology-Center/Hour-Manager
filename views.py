@@ -101,22 +101,6 @@ def AddHour(request, pk):
     )
 
 @login_required
-def claim_page(request, pk):
-    '''Uses the hidden primary key of a table to retain which person is being covered'''
-
-    shift = HourModel.objects.get(pk=pk)
-
-    hour_history.objects.create(cover_username = request.user.username,
-                                coveree_first = shift.first_name,
-                                coveree_last = shift.last_name,
-                                date = shift.date,
-                                start_time = shift.start_time,
-                                end_time = shift.end_time)
-    shift.delete()
-    
-    return HttpResponseRedirect("/hourmanager")
-
-@login_required
 def comments(request):
     context = { }
 
@@ -166,20 +150,54 @@ def history(request):
         context
     )
 
+
+@login_required
+def claim_page(request, pk):
+    '''Uses the hidden primary key of a table to retain which person is being covered'''
+
+    if (request.method == "GET" and request.GET.get('start', False) and request.GET.get('end', False)):
+        shift = HourModel.objects.get(pk=pk)
+        desired_start = datetime.strptime(request.GET.get('start'), '%H:%M').time()
+        desired_end = datetime.strptime(request.GET.get('end'), '%H:%M').time()
+        true_start = shift.start_time
+        true_end = shift.end_time
+
+        if (not desired_start >= true_start or not desired_end <= true_end):
+            return JsonResponse({
+                "status":"failed",
+                "reason":"There is an issue with your hours," +
+                " please correct them and resubmit."
+            })
+
+        if (desired_start == true_start and desired_end == true_end):
+            '''
+            hour_history.objects.create(cover_username = request.user.username,
+                                        coveree_first = shift.first_name,
+                                        coveree_last = shift.last_name,
+                                        date = shift.date,
+                                        start_time = shift.start_time,
+                                        end_time = shift.end_time)
+            shift.delete()
+            '''
+            return JsonResponse({
+                "status":"success",
+                "reason":"Hours claimed!"
+            })
+    
+
+    return JsonResponse({
+        "status":"failed",
+        "reason":"Hours not specified"
+    })
+
 #View helper functions down here, please don't include real views
 def email_threaded_helper(instance):
     #Alert all members that opted in for emails.
     for user in User.objects.all():
         options = UserOptions.objects.get_or_create(user=user)
 
-        if options[1]:
-            logger.warn("Had to create UserOptions for {}.".format(user.username))
-
-        print("{} - Texting: {} Email: {}.".format(user.username, options[0].texting, options[0].email))
-
         if options[0].email:
-            message = "{} {} has just put hours up on the hour manager.\nFrom {} to {} on {}\nBecause: {}".format(instance.first_name, instance.last_name, 
+            message = "{} {} has just put hours up on the hour manager.\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
                                                                                                                 instance.start_time, instance.end_time,
                                                                                                                 instance.date, instance.reason)
             email(user.email, "[STC] News hours on {}!".format(instance.date), message)
-            logger.info("Emailed user {} that a new hour is up!".format(user.username))

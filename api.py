@@ -11,6 +11,7 @@ def spec_hour(request, pk):
     except HourModel.DoesNotExist:
         return JsonResponse(
             {
+                "status":"failed",
                 "message":"This hour does not exist."
             }
         )

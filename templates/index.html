@@ -8,8 +8,6 @@
     
     <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/index.css' %}">
     <script type="text/javascript" src="{% static 'hour_manager/js/index.js' %}"></script>
-    <script src="{% static 'hour_manager/js/menu.js' %}"></script>
-    <script src="{% static 'hour_manager/js/update_page.js' %}"></script>
 
     {% if egg %}
         <script src="{% static 'hour_manager/js/egg.js' %}"></script>
@@ -39,7 +37,7 @@
                 });
             }
         }     
-        $(document).ready(setInterval(function(){updateInfo()}, 1500))
+        $(document).ready(setInterval(function(){updateInfo()}, 15000))
     </script>
     
 </head>
@@ -55,18 +53,37 @@
         </ul>
     </div>
     <div id='info-tab'>
+        <div id='info-reason' style='display: none;'>
+            <h2>Reason:</h2>
+            <p>
 
+            </p>
+            <hr>
+        </div>
+        <div id='info-time' style='display: none;'>
+            From: 
+            <br>
+            <input id='start_time' type='time' name='start-time'>
+            <br>
+            <br>
+            To
+            <br>
+            <input id='end_time' type='time' name='end-time'>
+            <hr>
+            <button id='claim-button'>Claim</button>
+            <p id='info-warning' style='color: red'></p>
+        </div>
     </div>
     {% if any_hours %}
     
         <div id="hourdiv"> <h1 id="nohours"> No hours! </h1> </div>
 
     {% else %}
-        {% if egg %}
+    {% if egg %}
 
-            <h1 id="nohours"> A E S T H E T I C </h1>
+        <h1 id="nohours"> A E S T H E T I C </h1>
 
-        {% endif %}
+    {% endif %}
     <div id="hoursdiv">
         <table class="hourtable">
             <tr>
@@ -86,25 +103,20 @@
                 <td> {{i.date}} </td>
                 <td> {{i.start_time|time_format}} </td>
                 <td> {{i.end_time|time_format}} </td>
-                {% if i.username != user.username %}
                 <td style='display:none'>
                     <a href="{% url 'claim_page' pk=i.pk %}"></a>
                 </td>
-                {% else %}
                 <td style='display:none'>
-                    <a href="{% url 'AddHour' pk=i.pk %}"></a>  
-                </td>
-                {% endif %}
-                <td class="reasontd" style='display:none'>
                     {{i.reason}}
+                </td>
+                <td id='times_{{i.pk}}' style='display:none'>
+                    <span class='start'>{{i.start_time}}</span>
+                    <span class='end'>{{i.end_time}}</span>
                 </td>
             </tr>
             {% endfor %}
         </table>
     </div>
-        <div id='info-panel'>
-            Hello my dudes.
-        </div>
     {% endif %}
 </body>
 
