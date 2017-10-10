@@ -169,8 +169,8 @@ def claim_page(request, pk):
                 " please correct them and resubmit."
             })
 
+        #Done
         if (desired_start == true_start and desired_end == true_end):
-            '''
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
                                         coveree_last = shift.last_name,
@@ -178,10 +178,85 @@ def claim_page(request, pk):
                                         start_time = shift.start_time,
                                         end_time = shift.end_time)
             shift.delete()
-            '''
             return JsonResponse({
                 "status":"success",
                 "reason":"Hours claimed!"
+            })
+
+        if (desired_start == true_start):
+            hour_history.objects.create(cover_username = request.user.username,
+                                        coveree_first = shift.first_name,
+                                        coveree_last = shift.last_name,
+                                        date = shift.date,
+                                        start_time = desired_start,
+                                        end_time = desired_end)
+            shift.delete()
+            HourModel.objects.create(
+                    username=shift.username,
+                    first_name=shift.first_name,
+                    last_name=shift.last_name,
+                    date=shift.date,
+                    start_time=desired_end,
+                    end_time=true_end,
+                    reason=shift.reason
+            )
+            return JsonResponse({
+                "status":"success",
+                "reason":"Claimed partial hours"
+            })
+
+        #TODO
+        if (desired_end == true_end):
+            hour_history.objects.create(cover_username = request.user.username,
+                                        coveree_first = shift.first_name,
+                                        coveree_last = shift.last_name,
+                                        date = shift.date,
+                                        start_time = desired_start,
+                                        end_time = desired_end)
+            shift.delete()
+            HourModel.objects.create(
+                    username=shift.username,
+                    first_name=shift.first_name,
+                    last_name=shift.last_name,
+                    date=shift.date,
+                    start_time=true_start,
+                    end_time=desired_start,
+                    reason=shift.reason
+            )
+            return JsonResponse({
+                "status":"success",
+                "reason":"Claimed partial hours"
+            })
+
+        if (desired_start > true_start and desired_end < true_end):
+            hour_history.objects.create(cover_username = request.user.username,
+                                        coveree_first = shift.first_name,
+                                        coveree_last = shift.last_name,
+                                        date = shift.date,
+                                        start_time = desired_start,
+                                        end_time = desired_end)
+            shift.delete()
+            HourModel.objects.create(
+                    username=shift.username,
+                    first_name=shift.first_name,
+                    last_name=shift.last_name,
+                    date=shift.date,
+                    start_time=true_start,
+                    end_time=desired_start,
+                    reason=shift.reason
+            )
+            HourModel.objects.create(
+                    username=shift.username,
+                    first_name=shift.first_name,
+                    last_name=shift.last_name,
+                    date=shift.date,
+                    start_time=desired_end,
+                    end_time=true_end,
+                    reason=shift.reason
+            )
+            return JsonResponse({
+                "status":"success",
+                "reason":"Claimed partial hours"
             })
     
 
