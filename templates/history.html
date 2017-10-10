@@ -6,17 +6,20 @@
 <head>
     <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static "hour_manager/css/index.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/menu.css' %}">
     <script type="text/javascript" src="{% static "hour_manager/js/index.js" %}"></script>
     <script src="{% static 'hour_manager/js/menu.js' %}"></script>
 </head>
 
 <body id="hourbody">
-    <div class="menu">
-        <a href="{% url 'index' %}"> Hour page </a>
-        <a href="{% url 'AddHour' %}"> Give hours </a>
-        <a href="{% url 'history' %}"> History page </a>
-        <a href="{% url 'comments' %}"> Generate comments </a>
-        <a href="{% url 'main_page:index' %}" id="main"> Home </a>
+    <div id="menu">
+        <ul>
+            <li><a href="{% url 'index' %}" class='menu_link'> Hours </a></li>
+            <li><a href="{% url 'AddHour' %}" class='menu_link'> Give </a></li>
+            <li><a href="{% url 'history' %}" class='menu_link'> History </a></li>
+            <li><a href="{% url 'comments' %}" class='menu_link'> Comments </a> </li>
+            <li><a href="{% url 'main_page:index' %}" class='menu_link'> Home </a></li>
+        </ul>
     </div>
     <div id="hoursdiv">
         <table class="hourtable">
