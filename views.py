@@ -15,7 +15,7 @@ from hour_manager.models import HourModel, hour_history
 from login.models import UserOptions, UserOptionsForm
 from .forms import HourAddForm
 
-from utils.alerts.alerter import email
+from utils.alerts.alerter import email, text
 
 #Creates a global logger object.
 logger = logging.getLogger(__name__)
@@ -67,8 +67,8 @@ def AddHour(request, pk):
             instance.last_name = request.user.last_name
             instance.save()
             
-            email_thread = threading.Thread(target=email_threaded_helper, args=(instance,))
-            email_thread.start()
+            notifier = threading.Thread(target=notification_threaded_helper, args=(instance,))
+            notifier.start()
 
             return HttpResponseRedirect("/hourmanager")
 
@@ -162,7 +162,13 @@ def claim_page(request, pk):
         true_start = shift.start_time
         true_end = shift.end_time
 
-        if (not desired_start >= true_start or not desired_end <= true_end):
+        #Checking validations
+        if (not desired_start >= true_start or 
+            not desired_end <= true_end or 
+            desired_start == desired_end or 
+            desired_start.minute % 60 > 0 or 
+            desired_end.minute % 60 > 0):
+
             return JsonResponse({
                 "status":"failed",
                 "reason":"There is an issue with your hours," +
@@ -205,7 +211,7 @@ def claim_page(request, pk):
                 "reason":"Claimed partial hours"
             })
 
-        #TODO
+        
         if (desired_end == true_end):
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
@@ -266,13 +272,16 @@ def claim_page(request, pk):
     })
 
 #View helper functions down here, please don't include real views
-def email_threaded_helper(instance):
+def notification_threaded_helper(instance):
     #Alert all members that opted in for emails.
     for user in User.objects.all():
         options = UserOptions.objects.get_or_create(user=user)
-
-        if options[0].email:
-            message = "{} {} has just put hours up on the hour manager.\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
-                                                                                                                instance.start_time, instance.end_time,
-                                                                                                                instance.date, instance.reason)
+        message = "{} {} has just put hours up on the hour manager.\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
+                                                                                                                    instance.start_time, instance.end_time,
+                                                                                                                    instance.date, instance.reason)
+        if options[0].email:                                                                                    
             email(user.email, "[STC] News hours on {}!".format(instance.date), message)
+
+        if options[0].texting:
+            text(options[0].phone_number, options[0].phone_carrier, message)
+            
