@@ -67,7 +67,11 @@ def AddHour(request, pk):
             instance.last_name = request.user.last_name
             instance.save()
             
-            notifier = threading.Thread(target=notification_threaded_helper, args=(instance,))
+            message = "{} {} has just put hours up on the hour manager.\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
+                                                                                                                    instance.start_time, instance.end_time,
+                                                                                                                    instance.date, instance.reason)
+
+            notifier = threading.Thread(target=notification_threaded_helper, args=(message))
             notifier.start()
 
             return HttpResponseRedirect("/hourmanager")
@@ -177,6 +181,8 @@ def claim_page(request, pk):
 
         #Done
         if (desired_start == true_start and desired_end == true_end):
+            msg_full = "{} claimed your full shift! Wow!".format(request.user.username)
+            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
                                         coveree_last = shift.last_name,
@@ -190,6 +196,9 @@ def claim_page(request, pk):
             })
 
         if (desired_start == true_start):
+            msg_full = "{} claimed the first part of your shift. You now need {} to {} covered".format(request.user.username,
+                                                                                                        desired_end, true_end)
+            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
                                         coveree_last = shift.last_name,
@@ -208,7 +217,15 @@ def claim_page(request, pk):
             )
             return JsonResponse({
                 "status":"success",
-                "reason":"Claimed partial hours"
+                "reason":"Claimed partial hours",
+                "hour_info": {
+                    "first_name":shift.first_name,
+                    "last_name":shift.last_name,
+                    "date":shift.date,
+                    "start_time":desired_end,
+                    "end_time":true_end,
+                    "reason":shift.reason
+                }
             })
 
         
@@ -220,6 +237,8 @@ def claim_page(request, pk):
                                         start_time = desired_start,
                                         end_time = desired_end)
             shift.delete()
+            msg_full = "{} claimed towards the end of your shift, you need {} to {} covered now.".format(request.user.username, true_start, desired_start)
+            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             HourModel.objects.create(
                     username=shift.username,
                     first_name=shift.first_name,
@@ -231,7 +250,10 @@ def claim_page(request, pk):
             )
             return JsonResponse({
                 "status":"success",
-                "reason":"Claimed partial hours"
+                "reason":"Claimed partial hours",
+                "hour_info": {
+                    
+                }
             })
 
         if (desired_start > true_start and desired_end < true_end):
@@ -242,6 +264,8 @@ def claim_page(request, pk):
                                         start_time = desired_start,
                                         end_time = desired_end)
             shift.delete()
+            msg_full = "{} split your shift. You need {} to {} covered.. And also {} to {}".format(request.user.username, true_start, desired_start, desired_end, true_end)
+            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             HourModel.objects.create(
                     username=shift.username,
                     first_name=shift.first_name,
@@ -262,7 +286,13 @@ def claim_page(request, pk):
             )
             return JsonResponse({
                 "status":"success",
-                "reason":"Claimed partial hours"
+                "reason":"Claimed partial hours",
+                "hour_info_1": {
+                    
+                },
+                "hour_info_2": {
+                    
+                }
             })
     
 
@@ -272,16 +302,23 @@ def claim_page(request, pk):
     })
 
 #View helper functions down here, please don't include real views
-def notification_threaded_helper(instance):
+def notification_threaded_helper(message):
     #Alert all members that opted in for emails.
     for user in User.objects.all():
         options = UserOptions.objects.get_or_create(user=user)
-        message = "{} {} has just put hours up on the hour manager.\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
-                                                                                                                    instance.start_time, instance.end_time,
-                                                                                                                    instance.date, instance.reason)
         if options[0].email:                                                                                    
             email(user.email, "[STC] News hours on {}!".format(instance.date), message)
 
         if options[0].texting:
             text(options[0].phone_number, options[0].phone_carrier, message)
+
+def notification_threaded_helper_single(username, headline, message):
+    #Alerts a user of notifications
+    user = User.objects.get(username=username)
+    options = UserOptions.objects.get_or_create(user=user)
+    if options[0].email:                                                                                    
+        email(user.email, headline, message)
+
+    if options[0].texting:
+        text(options[0].phone_number, options[0].phone_carrier, message)
             

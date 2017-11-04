@@ -4,6 +4,7 @@ Here we can define custom filters for template usage
 
 from django import template
 from django.template.defaultfilters import stringfilter
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from datetime import datetime, date
 
@@ -36,5 +37,9 @@ def time_format(value):
 @register.filter(name='usernametoname')
 @stringfilter
 def usernametoname(value):
-    name = User.objects.get(username=value)
+    try:
+        name = User.objects.get(username=value)
+    except ObjectDoesNotExist:
+        return "DELETED ACCOUNT"
+
     return "{} {}".format(name.first_name, name.last_name)
