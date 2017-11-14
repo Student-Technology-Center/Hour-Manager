@@ -71,7 +71,8 @@ def AddHour(request, pk):
                                                                                                                     instance.start_time, instance.end_time,
                                                                                                                     instance.date, instance.reason)
 
-            notifier = threading.Thread(target=notification_threaded_helper, args=(message))
+            print(message)
+            notifier = threading.Thread(target=notification_threaded_helper, args=(message,))
             notifier.start()
 
             return HttpResponseRedirect("/hourmanager")
@@ -307,7 +308,7 @@ def notification_threaded_helper(message):
     for user in User.objects.all():
         options = UserOptions.objects.get_or_create(user=user)
         if options[0].email:                                                                                    
-            email(user.email, "[STC] News hours on {}!".format(instance.date), message)
+            email(user.email, "[STC] New hours!", message)
 
         if options[0].texting:
             text(options[0].phone_number, options[0].phone_carrier, message)
