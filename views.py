@@ -67,8 +67,8 @@ def AddHour(request, pk):
             instance.last_name = request.user.last_name
             instance.save()
             
-            message = "{} {} has just put hours up on the hour manager.\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
-                                                                                                                    instance.start_time, instance.end_time,
+            message = "{} {} has just put hours up on the hour manager!\n\nFrom {} to {} on {}\n\nBecause: {}".format(instance.first_name, instance.last_name, 
+                                                                                                                    military_to_standard(instance.start_time), military_to_standard(instance.end_time),
                                                                                                                     instance.date, instance.reason)
 
             print(message)
@@ -314,6 +314,20 @@ def claim_page(request, pk):
         "status":"failed",
         "reason":"Hours not specified"
     })
+
+def military_to_standard(time):
+    new_time = str(time).split(':')
+    if int(new_time[0]) == 0:
+        return str(new_time[0]) + ':00 AM'
+    if int(new_time[0]) < 12:
+        if int(new_time[0]) >= 10:
+            return str(new_time[0]) + ':00 AM'
+        else:
+            return str(new_time[0][1:2]) + ':00 AM'
+    if int(new_time[0]) == 12:
+        return str(new_time[0]) + ':00 PM'
+    if int(new_time[0]) > 12:
+        return str(int(new_time[0]) - 12) + ':00 PM'
 
 #View helper functions down here, please don't include real views
 def notification_threaded_helper(message):
