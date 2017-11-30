@@ -40,7 +40,3 @@
     transition: 0.3s;
     border-bottom: 2px solid black;
 }
-
-#menu a:hover {
-    color: white;
-}

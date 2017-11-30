@@ -145,8 +145,11 @@ def comments(request):
 
 def history(request):
 
+    history = hour_history.objects.all()
+    sorted_history = sorted(history, key=lambda x: x.date)
+
     context = {
-        "history": hour_history.objects.all()
+        'history': history
     }
 
     return render(
@@ -189,19 +192,6 @@ def claim_page(request, pk):
             return JsonResponse({
                 "status":"failed",
                 "reason":"Must claim on the hour."
-            })
-
-        #Checking validations
-        if (not desired_start >= true_start or 
-            not desired_end <= true_end or 
-            desired_start == desired_end or 
-            desired_start.minute % 60 > 0 or 
-            desired_end.minute % 60 > 0):
-
-            return JsonResponse({
-                "status":"failed",
-                "reason":"There is an issue with your hours," +
-                " please correct them and resubmit."
             })
 
         #Done

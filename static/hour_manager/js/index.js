@@ -10,8 +10,14 @@ $(document).ready(function(){
         $('#info-time').css('display', 'block');
         $('#info-reason p').text(data.currentTarget.children[6].innerHTML)
 
-        var start = moment(data.currentTarget.children[7].children[0].innerHTML, 'h:mm a').format('HH:mm');
-        var end = moment(data.currentTarget.children[7].children[1].innerHTML, 'h:mm a').format('HH:mm')
+        var startString = data.currentTarget.children[7].children[0].innerHTML;
+        var endString = data.currentTarget.children[7].children[1].innerHTML;
+
+        var start = moment(startString, 'h:mm a').format('HH:mm');
+        var end = moment(endString, 'h:mm a').format('HH:mm')
+
+        if (startString === 'noon')
+            start = '12:00';
 
         $('#start_time').val(start);
         $('#end_time').val(end);

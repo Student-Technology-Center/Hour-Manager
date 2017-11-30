@@ -15,34 +15,6 @@
     {% if egg %}
         <script src="{% static 'hour_manager/js/egg.js' %}"></script>
     {% endif %}
-
-    <script>
-        var primary_keys = [];
-        function updateInfo() {
-            for (i=0;i<primary_keys.length;i++) {
-                $.get("/hourmanager/api/hour/" + primary_keys[i] + "/", function(data) {
-                    $('#info_' + data.pk + " td").each(function(i, tr){
-                        if (i == 4) 
-                            $(this).text(data.end_time);
-                        if (i == 3)
-                            $(this).text(data.start_time);
-                        if (i == 2) {
-                            /* Need to properly update date */
-                            var date = data.date;
-                            var restOfString = date.indexOf(" ");
-                            var currentDate = date.slice(0, 3) + "." + date.slice(restOfString);
-                            if (currentDate.slice(5, 6) == "0") {
-                                currentDate = currentDate.slice(0, 5) + currentDate.slice(6);
-                            }
-                            $(this).text(currentDate);
-                        }
-                    });
-                });
-            }
-        }     
-        $(document).ready(setInterval(function(){updateInfo()}, 15000))
-    </script>
-    
 </head>
 
 <body>
@@ -58,9 +30,7 @@
     <div id='info-tab'>
         <div id='info-reason' style='display: none;'>
             <h2>Reason:</h2>
-            <p>
-
-            </p>
+            <p></p>
             <hr>
         </div>
         <div id='info-time' style='display: none;'>
@@ -97,9 +67,6 @@
                 <th>End Time</th>
             </tr>
             {% for i in hours %}
-            <script>
-                primary_keys.push("{{i.pk}}");
-            </script>
             <tr id="info_{{ i.pk }}">
                 <td> {{i.first_name}} </td>
                 <td> {{i.last_name}} </td>

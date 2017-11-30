@@ -59,12 +59,12 @@ tr {
     height: 50px;
     
     background-color: white;
+    transition: 0.2s;
 }
 
 tr:hover {
-    transition: 0.5s;
+    transition: 0.2s;
     color: #bdd0ef;
-
     cursor: pointer;
 }
 
@@ -112,6 +112,13 @@ tr:hover {
     border-radius: 10px;
 
     padding: 0;
+    transition: .3s;
+}
+
+#claim-button:hover {
+    color: white;
+    background-color: black;
+    transition: .3s;
 }
 
 #info-reason p,

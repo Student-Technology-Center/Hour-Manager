@@ -37,17 +37,20 @@ form input[type='text']:focus {
 form input[type='submit'] {
   margin-left: auto;
   padding: 12px;
-  border: none;
-  background: #808080;
-  color: #fff;
+
+  border: 2px solid black;
+  border-radius: 10px;
+  background: white;
+  color: black;
   cursor: pointer;
+
 
   transition: .3s;
 }
 
 form input[type='submit']:hover {
-    background: #bdd0ef;
-    color: black;
+    background: black;
+    color: white;
 }
 
 #hoursdiv form {

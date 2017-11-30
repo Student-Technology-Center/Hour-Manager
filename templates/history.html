@@ -31,7 +31,7 @@
                 <th>End Time</th>
                 <th>Coverer's Name</th>
             </tr>
-            {% for i in history %}
+            {% for i in history reversed%}
             <tr class="info">
                 <td> {{i.coveree_first}} </td>
                 <td> {{i.coveree_last}} </td>

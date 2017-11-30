@@ -1,6 +1,6 @@
 body {
     font-family: sans-serif;
-    background-color: #1F3140;
+    background-color: white;
 
     display: flex;
     align-content: center;
@@ -11,13 +11,11 @@ body {
 form {
     margin: 0 auto;
 
-    color: white;
+    color: black;
 }
 
 form input[type='text'] {
     margin-top: 10px;
-    border: none;
-    border-radius: 6px;
 
     padding: 6px;
     width: 100%;
@@ -26,6 +24,9 @@ form input[type='text'] {
     font-size: 20px;
 
     transition: .3s;
+
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
 form input[type='text']:focus {
@@ -36,17 +37,18 @@ form input[type='text']:focus {
 form input[type='submit'] {
   margin-left: auto;
   padding: 12px;
-  border: none;
-  background: #808080;
-  color: #fff;
+  background: white;
+  border: 2px solid black;
+  border-radius: 10px;
+  color: black;
   cursor: pointer;
 
   transition: .3s;
 }
 
 form input[type='submit']:hover {
-    background: #bdd0ef;
-    color: black;
+    background: black;
+    color: white;
 }
 
 #ui-datepicker-div {
