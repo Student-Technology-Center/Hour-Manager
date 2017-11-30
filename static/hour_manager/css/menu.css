@@ -1,5 +1,5 @@
 #menu {
-    border-right: 1px solid white;
+    border-right: 2px solid black;
 
     max-width: 200px;
     height: 100%;
@@ -7,9 +7,8 @@
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #3F637F;
+    background-color: white;
     overflow-x: hidden;
-    transition: 0.5s;
 
     margin: 0;
     position: fixed;
@@ -33,15 +32,15 @@
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
-    color: white;
+    color: black;
     display: block;
 
     opacity: 1;
 
     transition: 0.3s;
-    border-bottom: 1px solid white;
+    border-bottom: 2px solid black;
 }
 
 #menu a:hover {
-    color: #bdd0ef;
+    color: white;
 }

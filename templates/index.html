@@ -8,7 +8,9 @@
     
     <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/index.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'hour_manager/css/menu.css' %}">
+
     <script type="text/javascript" src="{% static 'hour_manager/js/index.js' %}"></script>
+    <script type="text/javascript" src="{% static 'hour_manager/js/moment.js' %}"></script>
 
     {% if egg %}
         <script src="{% static 'hour_manager/js/egg.js' %}"></script>
@@ -67,11 +69,11 @@
             <input id='start_time' type='time' name='start-time'>
             <br>
             <br>
-            To
+            To:
             <br>
             <input id='end_time' type='time' name='end-time'>
             <hr>
-            <button id='claim-button'>Claim</button>
+            <button id='claim-button'><em>Claim</em></button>
             <p id='info-warning' style='color: red'></p>
         </div>
     </div>

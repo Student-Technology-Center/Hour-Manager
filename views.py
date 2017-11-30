@@ -167,6 +167,30 @@ def claim_page(request, pk):
         true_start = shift.start_time
         true_end = shift.end_time
 
+        if desired_start >= desired_end:
+            return JsonResponse({
+                "status":"failed",
+                "reason":"Start cannot be before end."
+            })
+
+        if desired_end > true_end:
+            return JsonResponse({
+                "status":"failed",
+                "reason":"You cannot claim past the end of the shift"
+            })
+
+        if desired_start < true_start:
+            return JsonResponse({
+                "status":"failed",
+                "reason":"You can't claim before the shift starts"
+            })
+
+        if desired_start.minute % 60 > 0 or desired_end.minute % 60 > 60:
+            return JsonResponse({
+                "status":"failed",
+                "reason":"Must claim on the hour."
+            })
+
         #Checking validations
         if (not desired_start >= true_start or 
             not desired_end <= true_end or 
@@ -182,7 +206,7 @@ def claim_page(request, pk):
 
         #Done
         if (desired_start == true_start and desired_end == true_end):
-            msg_full = "{} claimed your full shift! Wow!".format(request.user.username)
+            msg_full = "{} {} claimed your full shift! Hey, thats pretty neat.".format(request.user.first_name, request.user.last_name)
             notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
@@ -197,8 +221,7 @@ def claim_page(request, pk):
             })
 
         if (desired_start == true_start):
-            msg_full = "{} claimed the first part of your shift. You now need {} to {} covered".format(request.user.username,
-                                                                                                        desired_end, true_end)
+            msg_full = "{} {} claimed the first part of your shift. The remaining hours have been posted.".format(request.user.first_name, request.user.last_name)
             notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
@@ -238,7 +261,7 @@ def claim_page(request, pk):
                                         start_time = desired_start,
                                         end_time = desired_end)
             shift.delete()
-            msg_full = "{} claimed towards the end of your shift, you need {} to {} covered now.".format(request.user.username, true_start, desired_start)
+            msg_full = "{} {} claimed towards the end of your shift, rest of your hours have been posted.".format(request.user.first_name, request.user.last_name)
             notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             HourModel.objects.create(
                     username=shift.username,
@@ -265,7 +288,7 @@ def claim_page(request, pk):
                                         start_time = desired_start,
                                         end_time = desired_end)
             shift.delete()
-            msg_full = "{} split your shift. You need {} to {} covered.. And also {} to {}".format(request.user.username, true_start, desired_start, desired_end, true_end)
+            msg_full = "{} {} split your shift. Wow. Thanks, {} {}".format(request.user.first_name, request.user.last_name, request.user.first_name, request.user.last_name)
             notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             HourModel.objects.create(
                     username=shift.username,

@@ -1,32 +1,6 @@
 var claimLink;
 var selectedTr;
 
-function standardToMilitary(time) {
-    if (time == "noon") {
-        return "12:00";
-    }
-
-    console.log(time);
-
-    var num;
-
-    if (num != '0') {
-        num = time.slice(0, 2);
-
-        if (num.slice(1, 2) == ' '){
-            var newNum = parseInt(num);
-            newNum += 12;
-            var num = newNum.toString();
-            num += ":00";
-        } else {
-            num += ":00";
-            return num;
-        }
-    }
-
-    return num;
-}
-
 $(document).ready(function(){
     $('tr').click(function(data) {
         claimLink = data.currentTarget.children[5].children[0].getAttribute('href');
@@ -36,8 +10,8 @@ $(document).ready(function(){
         $('#info-time').css('display', 'block');
         $('#info-reason p').text(data.currentTarget.children[6].innerHTML)
 
-        var start = standardToMilitary(data.currentTarget.children[7].children[0].innerHTML);
-        var end = standardToMilitary(data.currentTarget.children[7].children[1].innerHTML);
+        var start = moment(data.currentTarget.children[7].children[0].innerHTML, 'h:mm a').format('HH:mm');
+        var end = moment(data.currentTarget.children[7].children[1].innerHTML, 'h:mm a').format('HH:mm')
 
         $('#start_time').val(start);
         $('#end_time').val(end);
