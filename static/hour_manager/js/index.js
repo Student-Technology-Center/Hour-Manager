@@ -9,6 +9,7 @@ $(document).ready(function(){
         $('#info-reason').css('display', 'block');
         $('#info-time').css('display', 'block');
         $('#info-reason p').text(data.currentTarget.children[6].innerHTML)
+        $('#info-warning').text("");
 
         var startString = data.currentTarget.children[7].children[0].innerHTML;
         var endString = data.currentTarget.children[7].children[1].innerHTML;

@@ -71,7 +71,6 @@ def AddHour(request, pk):
                                                                                                                     instance.start_time, instance.end_time,
                                                                                                                     instance.date, instance.reason)
 
-            print(message)
             notifier = threading.Thread(target=notification_threaded_helper, args=(message,))
             notifier.start()
 
