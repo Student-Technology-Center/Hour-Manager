@@ -144,11 +144,8 @@ def comments(request):
 
 def history(request):
 
-    history = hour_history.objects.all()
-    sorted_history = sorted(history, key=lambda x: x.date)
-
     context = {
-        'history': history
+        'history': hour_history.objects.all().order_by('date', 'start_time')
     }
 
     return render(
