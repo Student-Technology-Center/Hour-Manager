@@ -22,8 +22,19 @@ class HourAddForm(forms.ModelForm):
 
         date_obj = datetime.now()
         current_time = date_obj.time()
+        current_date = date_obj.date()
+
+        if date < current_date:
+            raise forms.ValidationError(
+                'Cannot post an hour before the current date.'
+                )
 
         if end_time < start_time:
             raise forms.ValidationError(
-                    "Please make sure your end time is after your start time"
-                )
+                "Please make sure your end time is after your start time"
+            )
+
+        if end_time < current_time:
+            raise forms.ValidationError(
+                "Your end time cannot be before the current time."
+            )

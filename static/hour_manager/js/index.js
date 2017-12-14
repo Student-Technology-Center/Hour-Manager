@@ -20,6 +20,9 @@ $(document).ready(function(){
         if (startString === 'noon')
             start = '12:00';
 
+        if (endString === 'noon')
+            end = '12:00'
+
         $('#start_time').val(start);
         $('#end_time').val(end);
     })

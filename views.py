@@ -9,6 +9,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 
 from hour_manager.models import HourModel, hour_history
@@ -31,13 +32,11 @@ def index(request):
     current_time = date_obj.time()
     current_date = date_obj.date()
 
-    #Some linters may say this line below is invalid, it IS valid
-    hours = HourModel.objects.all()
+    hours = HourModel.objects.all().filter(date__gte=current_date).exclude(end_time__lte=current_time)
+    old_hours = HourModel.objects.all().filter(date__lt=current_date)
 
-    #Remove all previous dates, everytime someone loads the page
-    for i in hours:
-        if (i.date < current_date and i.start_time < current_time and i.pk is not None):
-            i.delete()
+    for hour in old_hours:
+        hour.delete()
 
     context = {
         "hours":hours,
@@ -143,6 +142,22 @@ def comments(request):
     )
 
 def history(request):
+    
+    hours = hour_history.objects.all().order_by('date', 'start_time')
+
+    #Janky temporary check
+    #This will be gone when I rewrite hour manager.
+    #Ensures the person didn't claim their own shift
+    #and will remove if they did (from history), and
+    #also checks for non-existing user accounts
+    for hour in hours:
+        #First check if user exists
+        if (get_user_model().objects.filter(username=hour.cover_username).count() == 0):
+            hour.delete()
+            continue
+        current_user = get_user_model().objects.get(username=hour.cover_username)
+        if (current_user.first_name + current_user.last_name) == (hour.coveree_first + hour.coveree_last):
+            hour.delete()
 
     context = {
         'history': hour_history.objects.all().order_by('date', 'start_time')
@@ -184,7 +199,7 @@ def claim_page(request, pk):
                 "reason":"You can't claim before the shift starts"
             })
 
-        if desired_start.minute % 60 > 0 or desired_end.minute % 60 > 60:
+        if desired_start.minute % 60 > 0 or desired_end.minute % 60 > 0:
             return JsonResponse({
                 "status":"failed",
                 "reason":"Must claim on the hour."
@@ -310,6 +325,8 @@ def claim_page(request, pk):
         "status":"failed",
         "reason":"Hours not specified"
     })
+
+#------------------------------------------------------------------------------
 
 def military_to_standard(time):
     new_time = str(time).split(':')
