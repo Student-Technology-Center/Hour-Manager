@@ -33,8 +33,3 @@ class HourAddForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Please make sure your end time is after your start time"
             )
-
-        if end_time < current_time:
-            raise forms.ValidationError(
-                "Your end time cannot be before the current time."
-            )
