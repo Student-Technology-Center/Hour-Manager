@@ -32,7 +32,7 @@ def index(request):
     current_time = date_obj.time()
     current_date = date_obj.date()
 
-    hours = HourModel.objects.all().filter(date__gte=current_date).exclude(end_time__lte=current_time)
+    hours = HourModel.objects.all().filter(date__gte=current_date)
     old_hours = HourModel.objects.all().filter(date__lt=current_date)
 
     for hour in old_hours:
