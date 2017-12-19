@@ -5,8 +5,28 @@
     <title>
         Hour Manager
     </title>
+    <link rel='stylesheet' href='{% static "css/hour_index.css" %}'>
 </head>
 <body>
-    <h2>Hello :)</h2>
+	<div id='hour-index'>
+    	<div id='menu'>
+	    	<ul>
+	    		<li>
+	    			<button class='link-button'>history</button>
+	    		</li>
+	    		<span class='seperator'>|</span>
+	    		<li>
+	    			<button class='link-button'>claim</button>
+	    		</li>
+				<span class='seperator'>|</span>
+	    		<li >
+	    			<button class='link-button'>give</button>
+	    		</li>
+	    	</ul>
+	    </div>
+	    <div id='latest-shifts'>
+	    	<!-- Generated shifts up to x amount, that'll fit in this div -->
+	    </div>
+	</div>
 </body>    
 </html>

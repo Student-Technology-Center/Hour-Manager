@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 @login_required
 def index(request):
     context = { }
+
     return render(
         request,
         'hour_manager_index.html',

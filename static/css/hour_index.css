@@ -1,0 +1,68 @@
+body {
+    padding: 0;
+    margin: 0;
+
+    font-family: 'Lato', sans-serif;
+}
+
+#hour-index {
+	background-color: #53647E;
+	height: 100%;
+	width: 100%;
+
+	position: relative;
+}
+
+#menu {
+	height: 72px;
+	max-height: 72px;
+
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, 0%);
+	text-align: center;
+}
+
+#menu ul {
+	margin: 0;
+	padding-left: 0;
+	max-height: 72px;
+}
+
+#menu ul li {
+	display: inline;
+}
+
+#menu ul li:hover {
+}
+
+#menu ul li button {
+	height: 72px;
+	width: 125px;
+
+	background-color: transparent;
+	color: white;
+	border: none;
+	font-size: 18px;
+	outline: none;
+
+	transition: .3s;
+}
+
+#menu ul li button:hover {
+	cursor: pointer;
+	color: #85A2CA;
+
+	transform: translateY(6px) translate3d( 0, 0, 0);
+
+	transition: .1s;
+}
+
+#menu ul li button:focus {
+	border: none;
+}
+
+.seperator {
+	color: white;
+}
