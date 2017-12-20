@@ -6,26 +6,35 @@
         Hour Manager
     </title>
     <link rel='stylesheet' href='{% static "css/hour_index.css" %}'>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+    <script type='text/javascript' src='{% static "js/hour_index.js" %}'></script>
 </head>
 <body>
 	<div id='hour-index'>
     	<div id='menu'>
 	    	<ul>
 	    		<li>
-	    			<button class='link-button'>history</button>
+	    			<button id='history' class='link-button'>history</button>
 	    		</li>
 	    		<span class='seperator'>|</span>
 	    		<li>
-	    			<button class='link-button'>claim</button>
+	    			<button id='claim' class='link-button'>claim</button>
 	    		</li>
 				<span class='seperator'>|</span>
 	    		<li >
-	    			<button class='link-button'>give</button>
+	    			<button id='give' class='link-button'>give</button>
 	    		</li>
 	    	</ul>
 	    </div>
-	    <div id='latest-shifts'>
+	    <div id='claim-view' class='page-view'>
+		    <div id='latest-shifts'>
 	    	<!-- Generated shifts up to x amount, that'll fit in this div -->
+	    	</div>
+	    </div>
+	    <div id='history-view' class='page-view' style='opacity: 0'>
+	    </div>
+	    <div id='give-view' class='page-view' style='opacity: 0'>
+	    	
 	    </div>
 	</div>
 </body>    

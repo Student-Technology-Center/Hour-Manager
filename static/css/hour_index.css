@@ -66,3 +66,28 @@ body {
 .seperator {
 	color: white;
 }
+
+.page-view {
+	margin-top: 72px;
+	width: 100%;
+	height: 90%;
+
+	max-height: 972px;
+	max-width: 1920px; 
+
+	position: absolute;
+
+	background-color: black;
+}
+
+#claim-view {
+	background-color: white;
+}
+
+#history-view {
+	background-color: grey;
+}
+
+#give-view {
+	background-color: blue;
+}
