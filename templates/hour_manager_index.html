@@ -5,7 +5,9 @@
     <title>
         Hour Manager
     </title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link rel='stylesheet' href='{% static "css/hour_index.css" %}'>
+    <link rel='stylesheet' href='{% static "css/give_view.css" %}'>
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
     <script type='text/javascript' src='{% static "js/hour_index.js" %}'></script>
 </head>
@@ -14,6 +16,10 @@
     	<div id='menu'>
 	    	<ul>
 	    		<li>
+	    			<button id='dash' class='link-button'>dash</button>
+	    		</li>
+	    		<span class='seperator'>|</span>
+	    		<li>
 	    			<button id='history' class='link-button'>history</button>
 	    		</li>
 	    		<span class='seperator'>|</span>
@@ -21,21 +27,24 @@
 	    			<button id='claim' class='link-button'>claim</button>
 	    		</li>
 				<span class='seperator'>|</span>
-	    		<li >
+	    		<li>
 	    			<button id='give' class='link-button'>give</button>
 	    		</li>
 	    	</ul>
 	    </div>
-	    <div id='claim-view' class='page-view'>
+	    <div id='claim-view' class='page-view' style='opacity: 0'>
 		    <div id='latest-shifts'>
 	    	<!-- Generated shifts up to x amount, that'll fit in this div -->
 	    	</div>
 	    </div>
-	    <div id='history-view' class='page-view' style='opacity: 0'>
-	    </div>
+	    <div id='history-view' class='page-view' style='opacity: 0'></div>
 	    <div id='give-view' class='page-view' style='opacity: 0'>
-	    	
+	    	<div id='start-give'>
+	    		<h1>Lets put up a shift.</h1>
+	    		<span id='time-form'>I want to put up a shift on <span id='give-date'>{{ today }}</span><br>
+	    		starting at <span id='give-start'>{{ right_now }}</span></span>
+	    	</div>
 	    </div>
-	</div>
+	    <div id='dash-view' class='page-view' style='opacity: 0'></div>
 </body>    
 </html>

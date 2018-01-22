@@ -47,14 +47,14 @@ body {
 	font-size: 18px;
 	outline: none;
 
-	transition: .3s;
+	transition: .1s;
 }
 
 #menu ul li button:hover {
 	cursor: pointer;
 	color: #85A2CA;
 
-	transform: translateY(6px) translate3d( 0, 0, 0);
+	transform: translateY(6px) translate3d(0, 0, 0);
 
 	transition: .1s;
 }
@@ -77,17 +77,5 @@ body {
 
 	position: absolute;
 
-	background-color: black;
-}
-
-#claim-view {
-	background-color: white;
-}
-
-#history-view {
-	background-color: grey;
-}
-
-#give-view {
-	background-color: blue;
+	transition: 1s;
 }
