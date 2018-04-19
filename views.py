@@ -3,7 +3,6 @@ from datetime import datetime
 from random import randint
 from datetime import date
 import threading
-import logging
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -13,41 +12,16 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 
 from hour_manager.models import HourModel, hour_history
-from login.models import UserOptions, UserOptionsForm
 from .forms import HourAddForm
-
-from utils.alerts.alerter import email, text
-
-#Creates a global logger object.
-logger = logging.getLogger(__name__)
 
 @login_required
 def index(request):
     '''Return the index page.'''
 
-    easter_egg = randint(0, 100)
-
-    date_obj = datetime.now()
-
-    current_time = date_obj.time()
-    current_date = date_obj.date()
-
-    hours = HourModel.objects.all().filter(date__gte=current_date)
-    old_hours = HourModel.objects.all().filter(date__lt=current_date)
-
-    for hour in old_hours:
-        hour.delete()
-
-    context = {
-        "hours":hours,
-        "any_hours":len(hours) == 0,
-        "egg": easter_egg == 77
-    }
-
     return render(
         request,
         'index.html',
-        context
+        None
     )
 
 @login_required
