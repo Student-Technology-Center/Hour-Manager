@@ -13,6 +13,11 @@ $(document).ready(function() {
 	changeView(START_VIEW);
 
 	$('.link-button').click(function() {
+		if (this.id == 'home') {
+			window.location = '/';
+			return;
+		}
+
 		changeView(this.id);
 	})
 })

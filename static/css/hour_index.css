@@ -63,6 +63,11 @@ body {
 	border: none;
 }
 
+#home a {
+	text-decoration: none;
+	color: white;
+}
+
 .seperator {
 	color: white;
 }
@@ -77,5 +82,5 @@ body {
 
 	position: absolute;
 
-	transition: 1s;
+	transition: .3s;
 }
