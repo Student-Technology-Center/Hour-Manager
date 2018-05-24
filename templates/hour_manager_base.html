@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Hour Manager
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block content %}
+<div class='centered row'>
+    <div class='center aligned column'>
+    </div>
+</div>
+<div class="ui vertical menu">
+  <a class="active item">
+    Claim
+    <div class="ui purple label">{{ hours|length }}</div>
+  </a>
+  <a class="item">
+    Post
+  </a>
+  <a class="item">
+    History
+  </a>
+</div>
+<script>
+	$('.item').click(function (data) {
+		$('.item.active').removeClass('active')
+		$(this).addClass('active');
+	});
+</script>
+{% endblock %}

@@ -1,35 +1,24 @@
 from django import forms
+from django.utils import timezone
 
-from .models import HourModel
+from .models import HourModel, HourHistoryModel
 
-from datetime import datetime
+class HourModelAddForm(forms.ModelForm):
+    def clean(self):
+        super(HourModelAddForm, self).clean()
+        now = timezone.now()
 
-class HourAddForm(forms.ModelForm):
+        if self.cleaned_data.get('date') < now:
+            raise forms.ValidationError("Cannot post this date.")
+
+        if self.cleaned_data.get('end_time') <= self.cleaned_data.get('start_time'):
+            raise forms.ValidationError("Cannot have end time before start time")
+
     class Meta:
         model = HourModel
         fields = [
             "date",
             "start_time",
             "end_time",
-            "reason",
+            "reason"
         ]
-
-    def clean(self):
-        super(HourAddForm, self).clean()
-        date = self.cleaned_data.get('date', False)
-        start_time = self.cleaned_data.get('start_time', False)
-        end_time = self.cleaned_data.get('end_time', False)
-
-        date_obj = datetime.now()
-        current_time = date_obj.time()
-        current_date = date_obj.date()
-
-        if date < current_date:
-            raise forms.ValidationError(
-                'Cannot post an hour before the current date.'
-                )
-
-        if end_time < start_time:
-            raise forms.ValidationError(
-                "Please make sure your end time is after your start time"
-            )
