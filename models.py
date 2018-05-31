@@ -2,15 +2,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from  shiftmanager.models import Shift
+
 USER_MODEL = get_user_model()
 
 class HourModel(models.Model):
     user        = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE)
-    date        = models.DateField()
-    start_time  = models.TimeField()
-    end_time    = models.TimeField()
+    shifts      = models.ForeignKey(Shift, on_delete=models.CASCADE)
     reason      = models.CharField(max_length=120, default="")
-    active		= models.BooleanField(default=True)
 
 class HourHistoryModel(models.Model):
     claimed_by  = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE)

@@ -4,6 +4,11 @@ from django.utils import timezone
 from .models import HourModel, HourHistoryModel
 
 class HourModelAddForm(forms.ModelForm):
+    date        = forms.DateField()
+    start_time  = forms.TimeField()
+    end_time    = forms.TimeField()
+    reason      = forms.CharField(max_length=120, required=False)
+
     def clean(self):
         super(HourModelAddForm, self).clean()
         now = timezone.now()

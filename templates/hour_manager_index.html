@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Hour Manager
+{% endblock %}
+
+{% block links %}
+<script>
+  function submitHour() {
+    var hour = $('#post-form').serialize();
+
+    ajax_get('/hourmanager/api/hour/', hour, function(data) {
+      console.log(data);
+    });
+
+    ajax_post('/hourmanager/api/hour/', hour, function(data) {
+      console.log(data);
+    });
+
+    ajax_put('/hourmanager/api/hour/', hour, function(data) { 
+      console.log(data);
+    })
+
+    ajax_delete('/hourmanager/api/hour/', hour, function(data) {
+      console.log(data);
+    }); 
+
+    return false; 
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class='centered row'>
+  <div class='center aligned column'>
+    <div class='ui segment' style='width: 35%;'>
+      <form class='ui form' id='post-form' onsubmit='return submitHour();'>
+        <h4 class="ui dividing header">Time and Date</h4>
+        <div class='field'>
+            <div class='two fields'>
+              <div class='field'>
+                <label> {{ post.start_time.label }} </label>
+                {{ post.start_time }}
+              </div>
+              <div class='field'>
+                  <label> {{ post.end_time.label }} </label>
+                  {{ post.end_time }}
+              </div>
+            </div>
+            <div class='field'>
+              <label> {{ post.date.label}} </label>
+              {{ post.date }}
+            </div>
+            <div class='field'>
+              <label> {{ post.reason.label }} </label>
+              {{ post.reason }}
+            </div>
+            {% csrf_token %}
+            <input class='ui fluid button' type='submit' value='Post'>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% comment %} <div class="ui vertical menu">
+  <a class="active item">
+    Claim
+    <div class="ui purple label">{{ hours|length }}</div>
+  </a>
+  <a class="item">
+    Post
+  </a>
+  <a class="item">
+    History
+  </a>
+</div>
+<script>
+	$('.item').click(function (data) {
+		$('.item.active').removeClass('active')
+		$(this).addClass('active');
+	});
+</script> {% endcomment %}
+{% endblock %}

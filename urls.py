@@ -12,6 +12,6 @@ urlpatterns = [
 ]
 
 #Add api urls
-# urlpatterns += [
-# 	url(r'^api/', include('hour_manager.api.api_urls'))
-# ]
+urlpatterns += [
+	url(r'^api/', include('hour_manager.api.api_urls'))
+]

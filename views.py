@@ -1,30 +1,25 @@
 '''Hour manager sub directory views stored here'''
-from datetime import datetime
-from random import randint
-from datetime import date
-import threading
-import json
-
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
+from login.decorators import user_is_email_confirmed
 from django.shortcuts import render
 
-from hour_manager.models import HourModel
+from .forms import HourModelAddForm
 
 @login_required
+@user_is_email_confirmed
 def index(request):
-    '''Return the index page.'''
+    '''
+    Return the index page to the hour manager
+    '''
 
     context = {
-    	"hours" : HourModel.objects.all()
+        "post" : HourModelAddForm()
     }
 
     return render(
         request,
-        'index.html',
-        None
+        'hour_manager_index.html',
+        context
     )
 
 # @login_required
