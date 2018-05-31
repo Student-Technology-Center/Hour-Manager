@@ -10,21 +10,9 @@
   function submitHour() {
     var hour = $('#post-form').serialize();
 
-    ajax_get('/hourmanager/api/hour/', hour, function(data) {
-      console.log(data);
-    });
-
     ajax_post('/hourmanager/api/hour/', hour, function(data) {
       console.log(data);
     });
-
-    ajax_put('/hourmanager/api/hour/', hour, function(data) { 
-      console.log(data);
-    })
-
-    ajax_delete('/hourmanager/api/hour/', hour, function(data) {
-      console.log(data);
-    }); 
 
     return false; 
   }
@@ -56,7 +44,6 @@
               <label> {{ post.reason.label }} </label>
               {{ post.reason }}
             </div>
-            {% csrf_token %}
             <input class='ui fluid button' type='submit' value='Post'>
         </div>
       </form>
