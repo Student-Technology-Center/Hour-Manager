@@ -13,10 +13,12 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 
 from hour_manager.models import HourModel, hour_history
-from login.models import UserOptions, UserOptionsForm
+from login.models import UserOptions
 from .forms import HourAddForm
 
-from utils.alerts.alerter import email, text
+from utils.message import send_stc_email
+
+USER_MODEL = get_user_model()
 
 #Creates a global logger object.
 logger = logging.getLogger(__name__)
@@ -70,8 +72,8 @@ def AddHour(request, pk):
                                                                                                                     military_to_standard(instance.start_time), military_to_standard(instance.end_time),
                                                                                                                     instance.date, instance.reason)
 
-            notifier = threading.Thread(target=notification_threaded_helper, args=(message,))
-            notifier.start()
+            user_emails = [x.email for x in USER_MODEL.objects.all()]
+            send_stc_email("New hours", message, user_emails)
 
             return HttpResponseRedirect("/hourmanager")
 
@@ -152,10 +154,10 @@ def history(request):
     #also checks for non-existing user accounts
     for hour in hours:
         #First check if user exists
-        if (get_user_model().objects.filter(username=hour.cover_username).count() == 0):
+        if (USER_MODEL.objects.filter(username=hour.cover_username).count() == 0):
             hour.delete()
             continue
-        current_user = get_user_model().objects.get(username=hour.cover_username)
+        current_user = USER_MODEL.objects.get(username=hour.cover_username)
         if (current_user.first_name + current_user.last_name) == (hour.coveree_first + hour.coveree_last):
             hour.delete()
 
@@ -207,8 +209,6 @@ def claim_page(request, pk):
 
         #Done
         if (desired_start == true_start and desired_end == true_end):
-            msg_full = "{} {} claimed your full shift! Hey, thats pretty neat.".format(request.user.first_name, request.user.last_name)
-            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
                                         coveree_last = shift.last_name,
@@ -222,8 +222,6 @@ def claim_page(request, pk):
             })
 
         if (desired_start == true_start):
-            msg_full = "{} {} claimed the first part of your shift. The remaining hours have been posted.".format(request.user.first_name, request.user.last_name)
-            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             hour_history.objects.create(cover_username = request.user.username,
                                         coveree_first = shift.first_name,
                                         coveree_last = shift.last_name,
@@ -262,8 +260,6 @@ def claim_page(request, pk):
                                         start_time = desired_start,
                                         end_time = desired_end)
             shift.delete()
-            msg_full = "{} {} claimed towards the end of your shift, rest of your hours have been posted.".format(request.user.first_name, request.user.last_name)
-            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             HourModel.objects.create(
                     username=shift.username,
                     first_name=shift.first_name,
@@ -289,8 +285,6 @@ def claim_page(request, pk):
                                         start_time = desired_start,
                                         end_time = desired_end)
             shift.delete()
-            msg_full = "{} {} split your shift. Wow. Thanks, {} {}".format(request.user.first_name, request.user.last_name, request.user.first_name, request.user.last_name)
-            notification_threaded_helper_single(shift.username, "Hours notification (Please read)", msg_full)
             HourModel.objects.create(
                     username=shift.username,
                     first_name=shift.first_name,
@@ -341,25 +335,3 @@ def military_to_standard(time):
         return str(new_time[0]) + ':00 PM'
     if int(new_time[0]) > 12:
         return str(int(new_time[0]) - 12) + ':00 PM'
-
-#View helper functions down here, please don't include real views
-def notification_threaded_helper(message):
-    #Alert all members that opted in for emails.
-    for user in User.objects.all():
-        options = UserOptions.objects.get_or_create(user=user)
-        if options[0].email:                                                                                    
-            email(user.email, "[STC] New hours!", message)
-
-        if options[0].texting:
-            text(options[0].phone_number, options[0].phone_carrier, message)
-
-def notification_threaded_helper_single(username, headline, message):
-    #Alerts a user of notifications
-    user = User.objects.get(username=username)
-    options = UserOptions.objects.get_or_create(user=user)
-    if options[0].email:                                                                                    
-        email(user.email, headline, message)
-
-    if options[0].texting:
-        text(options[0].phone_number, options[0].phone_carrier, message)
-            
