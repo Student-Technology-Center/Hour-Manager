@@ -1,8 +1,7 @@
-'''Used to connecting our hour manager server to the SQL DB'''
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from  shiftmanager.models import Shift
+from shiftmanager.models import Shift
 
 USER_MODEL = get_user_model()
 

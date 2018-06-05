@@ -6,66 +6,75 @@
 {% endblock %}
 
 {% block links %}
+<!-- <script src="http://cdn.jtsage.com/jtsage-datebox/latest/jtsage-datebox.jqueryui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdn.jtsage.com/jtsage-datebox/latest/jtsage-datebox.jqueryui.min.css" /> -->
+<!-- development version, includes helpful console warnings -->
 <script>
-  function submitHour() {
-    var hour = $('#post-form').serialize();
+  var SEARCH  = "#search";
+  var SHIFT   = "#shifts";
+  var selectedShifts = [];
 
-    ajax_post('/hourmanager/api/hour/', hour, function(data) {
-      console.log(data);
-    });
-
-    return false; 
+  function createHour(data) {
+    return `
+      <div class="item">
+        <i class="large github middle aligned icon"></i>
+        <div class="content">
+          <a class="header">` + toTitleCase(data.day_of_week) + `</a>
+          <div class="description">` + moment(data.datetime).format('h:mm a') + `</div>
+        </div>
+      </div>
+    `;
   }
+
+  function checkShifts() {
+    var date = $(SEARCH).val();
+    var data = {
+      start: date,
+      end: date
+    }
+    
+    $.ajax({
+      url: '/shifts/api/get_shifts/',
+      data: data,
+      success: function(data) {
+        if (data.success) {
+          $(SHIFT).empty();
+          data.success.forEach(function (hour) {
+            $(SHIFT).append(createHour(hour))
+          })
+        } else {
+          console.log("Failed.")
+        }
+      }
+    })
+  }
+
 </script>
 {% endblock %}
 
 {% block content %}
 <div class='centered row'>
   <div class='center aligned column'>
-    <div class='ui segment' style='width: 35%;'>
-      <form class='ui form' id='post-form' onsubmit='return submitHour();'>
-        <h4 class="ui dividing header">Time and Date</h4>
-        <div class='field'>
-            <div class='two fields'>
-              <div class='field'>
-                <label> {{ post.start_time.label }} </label>
-                {{ post.start_time }}
-              </div>
-              <div class='field'>
-                  <label> {{ post.end_time.label }} </label>
-                  {{ post.end_time }}
-              </div>
-            </div>
-            <div class='field'>
-              <label> {{ post.date.label}} </label>
-              {{ post.date }}
-            </div>
-            <div class='field'>
-              <label> {{ post.reason.label }} </label>
-              {{ post.reason }}
-            </div>
-            <input class='ui fluid button' type='submit' value='Post'>
+    <div class='ui segment' style="padding: 0px;">
+      <div class="ui attached action input" style="width: 100%; height: 100px; font-size: 50px;">
+        <input type="text" placeholder="Enter a date..." id='search' style="border: 0px none; padding: 0px;">
+        <button class="ui button" onclick="checkShifts();">
+          Search
+        </button>
+      </div>
+      <div class="ui stackable two column grid">
+          <div class="column">
+            <h1>Hello</h1>
+          </div>
+          <div class="column">
+            <h1>Hello</h1>
+          </div>
         </div>
-      </form>
+      <div class='ui attached'>
+        <div class="ui huge relaxed divided selection list" id='shifts'>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-{% comment %} <div class="ui vertical menu">
-  <a class="active item">
-    Claim
-    <div class="ui purple label">{{ hours|length }}</div>
-  </a>
-  <a class="item">
-    Post
-  </a>
-  <a class="item">
-    History
-  </a>
-</div>
-<script>
-	$('.item').click(function (data) {
-		$('.item.active').removeClass('active')
-		$(this).addClass('active');
-	});
-</script> {% endcomment %}
 {% endblock %}
