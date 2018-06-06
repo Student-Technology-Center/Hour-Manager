@@ -8,7 +8,20 @@
 {% block links %}
 <!-- <script src="http://cdn.jtsage.com/jtsage-datebox/latest/jtsage-datebox.jqueryui.min.js"></script>
 <link rel="stylesheet" type="text/css" href="http://cdn.jtsage.com/jtsage-datebox/latest/jtsage-datebox.jqueryui.min.css" /> -->
-<!-- development version, includes helpful console warnings -->
+<style>
+  .item:hover {
+    color: rgba(0, 0, 0, .5) !important;
+    cursor: pointer;
+  }
+
+  .item {
+    color: rgba(0, 0, 0, .5) !important;
+  }
+
+  .item * {
+    pointer-events: none;
+  }
+</style>
 <script>
   var SEARCH  = "#search";
   var SHIFT   = "#shifts";
@@ -16,8 +29,8 @@
 
   function createHour(data) {
     return `
-      <div class="item">
-        <i class="large github middle aligned icon"></i>
+      <div class="item" pk="` + data.id + `">
+        <i class="large hourglass middle aligned icon"></i>
         <div class="content">
           <a class="header">` + toTitleCase(data.day_of_week) + `</a>
           <div class="description">` + moment(data.datetime).format('h:mm a') + `</div>
@@ -49,29 +62,41 @@
     })
   }
 
+  $(document).on("click", ".item", function(data) {
+    var key = parseInt(data.target.getAttribute("pk"));
+    var location = selectedShifts.indexOf(key);
+    
+    if (isNaN(key)) {
+      return;
+    }
+
+    /* This checks if the value is already selected */
+    if (location > -1) { 
+      selectedShifts.splice(location, 1);
+      $($(data.target).find("i")[0]).css("color", "rgba(0, 0, 0, .5");
+    } else {
+      selectedShifts.push(key);
+      $($(data.target).find("i")[0]).css("color", "rgba(0, 0, 0, 1");
+    }
+  });
 </script>
+{% endblock %}
+
+{% block fixed %}
+<div class="ui action input" style="width: 100%; height: 100px; font-size: 50px; bottom: 0; position: fixed;">
+    <input type="text" placeholder="Enter a date..." id='search' style="border: 0px none; background-color: #1b1c1d; color: white; border-radius: 0px; ">
+    <button class="ui button" onclick="checkShifts();">
+      Search
+    </button>
+</div>
 {% endblock %}
 
 {% block content %}
 <div class='centered row'>
   <div class='center aligned column'>
-    <div class='ui segment' style="padding: 0px;">
-      <div class="ui attached action input" style="width: 100%; height: 100px; font-size: 50px;">
-        <input type="text" placeholder="Enter a date..." id='search' style="border: 0px none; padding: 0px;">
-        <button class="ui button" onclick="checkShifts();">
-          Search
-        </button>
-      </div>
-      <div class="ui stackable two column grid">
-          <div class="column">
-            <h1>Hello</h1>
-          </div>
-          <div class="column">
-            <h1>Hello</h1>
-          </div>
-        </div>
+    <div class='ui segment' style="padding: 0px; border: 0px none;">
       <div class='ui attached'>
-        <div class="ui huge relaxed divided selection list" id='shifts'>
+        <div class="ui huge animated divided selection list" id='shifts'>
         </div>
       </div>
     </div>
