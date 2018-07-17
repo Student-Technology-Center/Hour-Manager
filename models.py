@@ -3,7 +3,18 @@ from django.contrib.auth import get_user_model
 
 from shiftmanager.models import Shift
 
-USER_MODEL = get_user_model()
+
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except:
+    from django.contrib.auth.models import User
+
+USER_MODEL = User
+
+#USER_MODEL = get_user_model()
+
+
 
 class HourModel(models.Model):
     user        = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE)
