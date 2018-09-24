@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Hour Manager | Available shifts 
+{% endblock %}
+
+{% block links %}
+<script type="text/javascript" src="{% static 'js/hour_claim.js' %}"></script>
+
+<style>
+.ui.accordion tbody.ui.content.active {
+	display: table-row-group;
+}
+
+tbody.ui.title.active {
+	background-color: rgba(0,0,0,.05);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<div class="centered row" style="padding-top:64px;">
+
+	<!-- Menu -->
+	<div class="ui four wide column">
+		<div class="ui vertical floated right pointing menu">
+			<a class="item active" href="/hourmanager/">
+				Available shifts
+			</a>
+			<a class="item" href="/hourmanager/post/">
+				Post a shift
+			</a>
+			<a class="item" href="/hourmanager/history/">
+				Past shifts
+			</a>
+		</div>
+	</div>
+	<div class="ui center aligned eight wide column">
+		<div class="ui attached message">
+			<div class="ui header">Available Shifts</div>
+		</div>
+		<table class="ui attached fixed table accordion">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Start</th>
+					<th>End</th>
+					<th>Posted By</th>
+				</tr>
+			</thead>
+
+			{% for shift_model, shift_range in shifts.items %}
+			<tbody class="ui title">
+				<tr>
+					<td>
+						<i class="dropdown icon"></i>
+						{{ shift_model.date }}
+					</td>
+					<td>{{ shift_model.start_time|time:"g:iA" }}</td>
+					<td>{{ shift_model.end_time|time:"g:iA" }}</td>
+					<td>{{ shift_model.posted_by.first_name }} {{ shift_model.posted_by.last_name }}</td>
+				</tr>
+			</tbody>
+			<tbody class="ui content" value="{{ shift_model.pk }}">
+				<tr>
+					<td>
+						<button class="ui button claim-shift" value="{{ shift_model.pk }}">Claim</button>
+					</td>
+					<td style="overflow:visible;">
+						<div class="ui compact selection dropdown">
+							<input type="hidden" name="claim_start">
+							<i class="dropdown icon"></i>
+							<div class="text" id="claim_start_{{ shift_model.pk }}">{{ shift_range.0 }}</div>
+							<div class="menu">
+							{% for hour in shift_range|slice:":-1" %}
+								<div class="item" data-value="{{ hour }}">{{ hour }}</div>
+							{% endfor %}
+							</div>
+						</div>
+					</td>
+					<td style="overflow:visible;">
+						<div class="ui compact selection dropdown">
+							<input type="hidden" name="claim_end">
+							<i class="dropdown icon"></i>
+							<div class="text" id="claim_end_{{ shift_model.pk }}">{{ shift_range|last }}</div>
+							<div class="menu">
+							{% for hour in shift_range|slice:"1:" %}
+								<div class="item" data-value="{{ hour }}">{{ hour }}</div>
+							{% endfor %}
+							</div>
+						</div></td>
+					<td>
+						{% if shift_model.posted_by == request.user %}
+							<button class="ui red button delete-shift">Delete</button>
+						{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td colspan=4>
+						<div class="ui sub header">Reason </div>{{ shift_model.reason }}
+					</td>
+				</tr>
+			</tbody>
+			{% endfor %}
+		</table>
+	</div>
+
+	<!-- Padding -->
+	<div class="four wide column">
+	</div>
+
+</div>	
+{% endblock %}

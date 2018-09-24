@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Hour Manager | History
+{% endblock %}
+
+{% block links %}
+<script>
+$(document).ready(function() {
+	$('.ui.dropdown').dropdown();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<div class="centered row" style="padding-top:64px;">
+
+	<!-- Menu -->
+	<div class="ui four wide column">
+		<div class="ui vertical floated right pointing menu">
+			<a class="item" href="/hourmanager/">
+				Available shifts
+			</a>
+			<a class="item" href="/hourmanager/post/">
+				Post a shift
+			</a>
+			<a class="item active" href="/hourmanager/history/">
+				Past shifts
+			</a>
+		</div>
+	</div>
+	<div class="ui center aligned eight wide column">
+		<div class="ui attached message">
+			<div class="ui header">
+				Past shifts
+			</div>
+		</div>
+		<table class="ui attached table">
+			<thead>
+				<tr>
+					<th>Posted by</th>
+					<th>Taken by</th>
+					<th>Start</th>
+					<th>End</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for shift in shifts %}
+				<tr>
+					<td>{{ shift.posted_by.first_name }} {{ shift.posted_by.last_name }}</td>
+					<td>{{ shift.taken_by.first_name }} {{ shift.taken_by.last_name }}</td>
+					<td>{{ shift.start_time|time:"g:iA" }}</td>
+					<td>{{ shift.end_time|time:"g:iA" }}</td>
+					<td>{{ shift.date }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Padding -->
+	<div class="four wide column">
+	</div>
+
+</div>	
+{% endblock %}

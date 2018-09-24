@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Hour Manager | {% block subtitle %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+
+<div class="centered row" style="padding-top:64px;">
+
+	<!-- Menu -->
+	<div class="ui four wide column">
+		<div class="ui vertical floated right pointing menu">
+			<a class="item active" href="/hourmanager/">
+				Available shifts
+			</a>
+			<a class="item" href="/hourmanager/post/">
+				Post a shift
+			</a>
+			<a class="item" href="/hourmanager/saved/">
+				Saved shifts
+			</a>
+		</div>
+	</div>
+	<div class="ui center aligned eight wide column">
+		{% block page_content %}
+		{% endblock %}
+	</div>
+
+	<!-- Padding -->
+	<div class="four wide column">
+	</div>
+
+</div>
+
+{% endblock %}

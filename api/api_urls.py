@@ -1,7 +1,7 @@
+from . import api_views as view
 from django.conf.urls import url
 
-from hour_manager.api.api import Hour
-
 urlpatterns = [
-    url(r'^hour/(?P<pk>[0-9])*/?$', Hour.as_view(), name='hour')
+    url(r'claim/', view.claim),
+    url(r'delete/(?P<pk>\d+)/?$', view.delete),
 ]

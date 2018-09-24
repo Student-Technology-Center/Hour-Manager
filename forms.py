@@ -1,8 +1,36 @@
 from django import forms
-from django.utils import timezone
+from .models import PostedShiftModel, OPEN_HOURS
+from datetime import datetime, date, time
 
-from .models import HourModel, HourHistoryModel
+today = date.today().strftime("%B %d, %Y")
 
-# class HourModelAddForm(forms.ModelForm):
-#     class Meta:
-#         model = HourModel
+class PostShiftForm(forms.Form):
+	date = forms.DateField(
+		input_formats=['%B %d, %Y'], 
+		widget=forms.TextInput(attrs={'id':'date-value','placeholder':today,'autocomplete':'off'}))
+	start_time = forms.TimeField(
+		label='Start Time', 
+		input_formats=['%I:%M%p'])
+	end_time = forms.TimeField(
+		label='End Time', 
+		input_formats=['%I:%M%p'])
+	reason = forms.CharField(
+		max_length=300,
+		widget=forms.Textarea(attrs={'placeholder':'Why give up a shift?','rows':'3'}))
+
+	# Adding to default form validation to ensure that the start/end time is valid
+	def clean(self):
+		cleaned_data = super().clean()
+		s_t = cleaned_data.get('start_time')
+		e_t = cleaned_data.get('end_time')
+
+		print(s_t)
+		print(e_t)
+
+		if s_t and e_t:
+			if s_t >= e_t:
+				raise forms.ValidationError(
+					('End time must be after start time'),
+					code='invalid_times'
+					)
+

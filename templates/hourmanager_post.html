@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Hour Manager | Post
+{% endblock %}
+
+{% block links %}
+<script>
+$( document ).ready(function() {
+	$('.ui.dropdown').dropdown();
+
+	$('#date-input').calendar({
+		type: 'date'
+	});
+
+	$('#date-btn').click(function() {
+		console.log($("#date-value").val());
+	});
+});
+</script>
+
+<style>
+#id_reason {
+	resize:none;
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="centered row" style="padding-top:64px;">
+
+	<!-- Menu -->
+	<div class="ui four wide column">
+		<div class="ui vertical floated right pointing menu">
+			<a class="item" href="/hourmanager/">
+				Available shifts
+			</a>
+			<a class="item active" href="/hourmanager/post/">
+				Post a shift
+			</a>
+			<a class="item" href="/hourmanager/history/">
+				Past shifts
+			</a>
+		</div>
+	</div>
+	<div class="ui center aligned eight wide column">
+		<div class="ui attached message">
+			<div class="ui header">Post a shift</div>
+		</div>
+		<div class="ui attached segment">
+			{% if form.non_field_errors %}
+				{{ form.non_field_errors }}
+			{% endif %}
+			<form class="ui form" action="/hourmanager/post/" method="post">
+			    {% csrf_token %}
+		    	
+		    	<div class="three fields">
+		    		<div class="field">
+			    		<h4 class='ui header'>{{ form.date.label }}</h4>
+					    <div class="ui calendar" id="date-input">	
+					    	<div class="ui input left icon">
+					    		<i class="calendar icon"></i>
+					    		{{ form.date }}
+					    	</div>
+					    </div>
+					</div>
+		    		<div class="field">
+				    	<h4 class="ui header">{{ form.start_time.label }}</h4>
+				    	<div class='ui selection dropdown'>
+					    	<input type="hidden" name="{{ form.start_time.html_name }}">
+						    <i class="dropdown icon"></i>
+						    <div class="default text">{{ form.start_time.label }}</div>
+						    <div class="menu">
+						    	{% for timeval in hours %}
+						    		<div class="item" data-value="{{ timeval }}">{{ timeval }}</div>
+						    	{% endfor %}
+						    </div>
+						</div>
+					</div>
+					<div class="field">
+					    <h4 class="ui header">{{ form.end_time.label }}</h4>
+					    <div class="ui selection dropdown" id="shift-end">
+					    	<input type="hidden" name="{{ form.end_time.html_name }}">
+						    <i class="dropdown icon"></i>
+						    <div class="default text">{{ form.end_time.label }}</div>
+						    <div class="menu">
+						    	{% for timeval in hours %}
+						    		<div class="item" data-value="{{ timeval }}">{{ timeval }}</div>
+						    	{% endfor %}
+						    </div>
+					    </div>
+					</div>
+				</div>
+
+				<div class="field">
+				    <h4 class='ui header'>{{ form.reason.label }}</h4>
+				    <div class='ui field' id='shift-reason'>
+				    	{{ form.reason }}
+				    </div>
+				</div>
+			    <input class="ui button" type="submit" value="Post" />
+			</form>
+
+		</div>
+	</div>
+
+	<!-- Padding -->
+	<div class="four wide column">
+	</div>
+
+</div>
+
+{% endblock %}
