@@ -2,8 +2,13 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 # Create your models here.
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except:
+    from django.contrib.auth.models import User
 
-USER = get_user_model()
+USER = User
 
 DAYS_OF_WEEK = (
     (0, 'Monday'),
