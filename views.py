@@ -6,6 +6,7 @@ from utils.message import send_stc_email
 
 from django.contrib.auth.decorators import login_required, permission_required
 from login.decorators import user_is_email_confirmed
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 
 from pandas import date_range
 import datetime
@@ -88,7 +89,6 @@ def post(request):
 
 	context = {
 		'hours' : OPEN_HOURS.values(),
-		'shifts' : PostedShiftModel.objects.all(),
 		'form' : form,
 	}
 

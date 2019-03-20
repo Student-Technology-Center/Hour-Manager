@@ -49,9 +49,6 @@ $( document ).ready(function() {
 			<div class="ui header">Post a shift</div>
 		</div>
 		<div class="ui attached segment">
-			{% if form.non_field_errors %}
-				{{ form.non_field_errors }}
-			{% endif %}
 			<form class="ui form" action="/hourmanager/post/" method="post">
 			    {% csrf_token %}
 		    	
@@ -99,8 +96,16 @@ $( document ).ready(function() {
 				    	{{ form.reason }}
 				    </div>
 				</div>
-			    <input class="ui button" type="submit" value="Post" />
+			  <input class="ui button" type="submit" value="Post" />
 			</form>
+
+			{% if form.non_field_errors %}
+				{% for error in form.non_field_errors %}
+					<div class="ui visible negative message">
+					  <p>{{error}}</p>
+					</div>
+				{% endfor %}
+			{% endif %}
 
 		</div>
 	</div>
