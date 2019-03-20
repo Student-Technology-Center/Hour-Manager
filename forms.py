@@ -21,16 +21,18 @@ class PostShiftForm(forms.Form):
 	# Adding to default form validation to ensure that the start/end time is valid
 	def clean(self):
 		cleaned_data = super().clean()
-		s_t = cleaned_data.get('start_time')
-		e_t = cleaned_data.get('end_time')
+		s_t 	= cleaned_data.get('start_time')
+		e_t 	= cleaned_data.get('end_time')
+		date 	= cleaned_data.get('date')
 
-		print(s_t)
-		print(e_t)
+		if s_t and e_t and s_t >= e_t:
+			raise forms.ValidationError(
+				('End time must be after start time'),
+				code='invalid_times'
+				)
 
-		if s_t and e_t:
-			if s_t >= e_t:
-				raise forms.ValidationError(
-					('End time must be after start time'),
-					code='invalid_times'
-					)
-
+		if date and date < date.today():
+			raise forms.ValidationError(
+				('Can\'t post shifts from the past'),
+				code='past_date'
+				)

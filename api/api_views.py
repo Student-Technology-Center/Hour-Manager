@@ -3,6 +3,8 @@ from django.views.decorators.http import require_http_methods
 from hour_manager.models import PostedShiftModel
 from datetime import datetime
 
+from utils.message import send_stc_email
+
 def delete(request, pk):
 
 	try:
@@ -51,7 +53,7 @@ def claim(request):
 	        'message':'Invalid claim times'
 	    })
 
-
+	# Checking time range to split the shift claim
 	if start_time == shift.start_time and end_time == shift.end_time:
 		shift.taken_by = request.user
 		shift.save()
@@ -85,6 +87,10 @@ def claim(request):
 			shift.taken_by = request.user
 			shift.save()
 
+	# Informing the person whose shift was taken
+	subject = "{} claimed your hours!".format(request.user.first_name)
+	message = """Your shift on {} from {} to {} was claimed by {}!""".format(shift.date, start_time, end_time, request.user.first_name)
+	send_stc_email(subject, message, {request.user.email}, True)
 
 	return JsonResponse({
         'status':'success',
