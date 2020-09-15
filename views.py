@@ -65,7 +65,7 @@ def post(request):
 				reason=reason
 				)
 
-			subject = "New hours"
+			subject = "New hours!"
 			message = \
 				"{} {} has just put hours up on the hour manager!\n\nFrom {} to {} on {}\n\nBecause: {}" \
 					.format(
